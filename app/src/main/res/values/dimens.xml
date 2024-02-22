@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="padding_medium">16dp</dimen>
+    <dimen name="padding_small">8dp</dimen>
+    <dimen name="padding_large">32dp</dimen>
+    <dimen name="image_size_small">64dp</dimen>
+    <dimen name="image_size">72dp</dimen>
+    <dimen name="image_size_medium">100dp</dimen>
+    <dimen name="image_size_large">300dp</dimen>
+
+    <dimen name="thickness_divider">1dp</dimen>
+</resources>

@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Music App</string>
+    <string name="thanh_thao">Thanh Thảo</string>
+    <string name="co_quen_duoc_dau">Có quên được đâu</string>
+    <string name="tran_thu_ha">Trần Thu Hà</string>
+    <string name="em_ve_tinh_khoi">Em về tinh khôi</string>
+    <string name="minh_thuan">Minh Thuận</string>
+    <string name="noi_dau_ngot_ngao">Nỗi đau ngọt ngào</string>
+    <string name="phuong_thanh">Phương Thanh</string>
+    <string name="tinh_co">Tình Cờ</string>
+    <string name="tuan_hung">Tuấn Hưng</string>
+    <string name="tinh_yeu_lung_linh">Tình yêu lung linh</string>
+    <string name="ho_quynh_huong">Hồ Quỳnh Hương</string>
+    <string name="uoc_mo_trong_doi">Ước mơ trong đời</string>
+    <string name="logo">Logo</string>
+    <string name="musium">Musium</string>
+    <string name="welcome">Welcome</string>
+    <string name="recommend_for_you">Recommend for you</string>
+</resources>
