@@ -1,5 +1,7 @@
 package com.example.musicapp
 
+import android.os.Handler
+import android.os.Looper
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -26,10 +28,11 @@ enum class MusicScreen {
 }
 
 @Composable
-fun MusicApp(modifier: Modifier = Modifier) {
-    val navController: NavHostController = rememberNavController()
-    val viewModel: SongViewModel = viewModel()
-
+fun MusicApp(
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+    viewModel: SongViewModel = viewModel()
+) {
     Scaffold(modifier = modifier) { paddingValues ->
         val uiState by viewModel.uiState.collectAsState()
         NavHost(
@@ -46,10 +49,14 @@ fun MusicApp(modifier: Modifier = Modifier) {
                 )
             }
             composable(route = MusicScreen.Song.name) {
+                val context = LocalContext.current
                 SongScreen(
                     song = DataSource.songs,
                     onPlaySongClicked = {
-                        viewModel.setSong(it)
+                        if (uiState.currentSong == null) {
+                            viewModel.setSong(it)
+                            viewModel.setMusicExoPlayer(context)
+                        }
                         navController.navigate(
                             route = MusicScreen.PlayingSong.name
                         )
@@ -58,22 +65,36 @@ fun MusicApp(modifier: Modifier = Modifier) {
                 )
             }
             composable(route = MusicScreen.PlayingSong.name) {
-                val context = LocalContext.current
-                viewModel.setMusicExoPlayer(context)
+                if (uiState.isSongPlaying) {
+                    viewModel.getCurrentPosition()
+                }
+
                 PlayingSongScreen(
                     onClick = {
                         viewModel.playOrPauseSong()
                     },
                     isPlaying = uiState.isSongPlaying,
-                    value = uiState.progress,
+                    currentPosition = uiState.currentDuration.toFloat(),
                     duration = uiState.duration.toFloat(),
-                    onValueChange = { value ->
-                        viewModel.seekTo(value.toLong())
+                    onValueChange = {
+                        viewModel.seekTo(it.toLong())
                     },
                     onValueChangeFinish = {
-                        viewModel.pauseSong()
+                        viewModel.getCurrentPosition()
                     },
                     currentSong = uiState.currentSong!!,
+                    onNextSong = {
+                        viewModel.playNextSong()
+                    },
+                    onPreviousSong = {
+                        viewModel.playPreviousSong()
+                    },
+                    isLooping = uiState.isLooping,
+                    isShuffle = uiState.isShuffle,
+                    onLoopSong = {
+                        viewModel.loopSong()
+                    },
+                    onShuffleSong = {},
                     modifier = Modifier.fillMaxSize()
                 )
             }

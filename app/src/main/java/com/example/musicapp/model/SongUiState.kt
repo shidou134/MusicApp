@@ -7,7 +7,7 @@ data class SongUiState(
     val isLooping: Boolean = false,
     val isShuffle: Boolean = false,
     val duration: Long = 0,
-    val currentDuration: Int = 0,
+    val currentDuration: Long = 0,
     val sliderPosition: Int = 0
 )
 
