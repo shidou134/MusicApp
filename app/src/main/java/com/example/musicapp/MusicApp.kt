@@ -1,7 +1,5 @@
 package com.example.musicapp
 
-import android.os.Handler
-import android.os.Looper
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -33,6 +31,7 @@ fun MusicApp(
     navController: NavHostController = rememberNavController(),
     viewModel: SongViewModel = viewModel()
 ) {
+    val context = LocalContext.current
     Scaffold(modifier = modifier) { paddingValues ->
         val uiState by viewModel.uiState.collectAsState()
         NavHost(
@@ -49,13 +48,12 @@ fun MusicApp(
                 )
             }
             composable(route = MusicScreen.Song.name) {
-                val context = LocalContext.current
                 SongScreen(
                     song = DataSource.songs,
                     onPlaySongClicked = {
                         if (uiState.currentSong == null) {
                             viewModel.setSong(it)
-                            viewModel.setMusicExoPlayer(context)
+                                viewModel.setMusicExoPlayer(context)
                         }
                         navController.navigate(
                             route = MusicScreen.PlayingSong.name
@@ -68,7 +66,6 @@ fun MusicApp(
                 if (uiState.isSongPlaying) {
                     viewModel.getCurrentPosition()
                 }
-
                 PlayingSongScreen(
                     onClick = {
                         viewModel.playOrPauseSong()
@@ -94,7 +91,9 @@ fun MusicApp(
                     onLoopSong = {
                         viewModel.loopSong()
                     },
-                    onShuffleSong = {},
+                    onShuffleSong = {
+                        viewModel.shuffleSong()
+                    },
                     modifier = Modifier.fillMaxSize()
                 )
             }

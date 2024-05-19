@@ -8,7 +8,8 @@ data class SongUiState(
     val isShuffle: Boolean = false,
     val duration: Long = 0,
     val currentDuration: Long = 0,
-    val sliderPosition: Int = 0
+    val sliderPosition: Int = 0,
+    val isBound:Boolean = false
 )
 
 

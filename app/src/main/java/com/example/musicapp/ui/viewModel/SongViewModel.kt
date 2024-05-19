@@ -4,7 +4,6 @@ import android.content.Context
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.ViewModel
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlin.math.log
 
 class SongViewModel : ViewModel() {
 
@@ -28,7 +26,6 @@ class SongViewModel : ViewModel() {
     private var handler = Handler(Looper.getMainLooper())
 
     fun setMusicExoPlayer(context: Context) {
-//    val context = LocalContext.current
         player = ExoPlayer.Builder(context).build()
         DataSource.songs.forEach { song ->
             val mediaItem = MediaItem.fromUri(song.url)
@@ -53,12 +50,6 @@ class SongViewModel : ViewModel() {
 
     }
 
-//    fun getDuration(): Long {
-//        _uiState.value.duration = player.duration
-//        Log.d("shidou", "getDuration:${player.duration} ")
-//        return _uiState.value.duration
-//    }
-
     fun seekTo(position: Long) {
         player.seekTo(position * 1000)
         _uiState.update {
@@ -78,20 +69,6 @@ class SongViewModel : ViewModel() {
             )
         }
         Log.d("shidou", "setSong: ${song.duration}")
-    }
-
-    fun playSong() {
-        player.play()
-        _uiState.update {
-            it.copy(isSongPlaying = true)
-        }
-    }
-
-    fun pauseSong() {
-        player.pause()
-        _uiState.update {
-            it.copy(isSongPlaying = false)
-        }
     }
 
     fun playOrPauseSong() {
@@ -138,24 +115,22 @@ class SongViewModel : ViewModel() {
         }
         if (_uiState.value.isLooping) {
             player.repeatMode = Player.REPEAT_MODE_ONE
-        }else{
+        } else {
             player.repeatMode = Player.REPEAT_MODE_OFF
             playNextSong()
         }
     }
-//    fun addListener(){
-//        player.addListener(object : Player.Listener {
-//            override fun onPlaybackStateChanged(playbackState: Int) {
-//                super.onPlaybackStateChanged(playbackState)
-//                if (_uiState.value.isLooping) {
-//                    player.repeatMode = Player.REPEAT_MODE_ONE
-//                }else{
-//                    player.repeatMode = Player.REPEAT_MODE_OFF
-//                    playNextSong()
-//                }
-//            }
-//        })
-//    }
+
+    fun shuffleSong() {
+        _uiState.update {
+            it.copy(
+                isShuffle = !it.isShuffle
+            )
+        }
+        if (_uiState.value.isShuffle) {
+            player.shuffleModeEnabled
+        }
+    }
 
 }
 
