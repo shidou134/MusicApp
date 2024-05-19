@@ -14,12 +14,18 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.musicapp.data.DataSource
+import com.example.musicapp.ui.OnBroadingScreen
 import com.example.musicapp.ui.PlayingSongScreen
 import com.example.musicapp.ui.SongScreen
 import com.example.musicapp.ui.viewModel.SongViewModel
 import com.example.musicapp.ui.WelcomeScreen
+import com.example.musicapp.ui.login.view.LoginScreen
+import com.example.musicapp.ui.register.view.RegistrationScreen
 
 enum class MusicScreen {
+    OnBoarding,
+    Login,
+    Register,
     Welcome,
     Song,
     PlayingSong
@@ -36,9 +42,44 @@ fun MusicApp(
         val uiState by viewModel.uiState.collectAsState()
         NavHost(
             navController = navController,
-            startDestination = MusicScreen.Welcome.name,
+            startDestination = MusicScreen.OnBoarding.name,
             modifier = Modifier.padding(paddingValues)
         ) {
+            composable(route = MusicScreen.OnBoarding.name) {
+                OnBroadingScreen(
+                    onLoginClick = {
+                        navController.navigate(route = MusicScreen.Login.name)
+                    },
+                    onRegisterClick = {
+                        navController.navigate(route = MusicScreen.Register.name)
+                    },
+                    onLoginWithGoogleClick = {},
+                    modifier = Modifier.fillMaxSize()
+                )
+            }
+            composable(route = MusicScreen.Login.name) {
+                LoginScreen(
+                    onNavigateToRegistration = {
+                        navController.navigate(route = MusicScreen.Register.name)
+                    },
+                    onLoginWithGoogle = {},
+                    onNavigateToForgotPassword = {},
+                    onNavigateToWelcomeScreen = {
+                        navController.navigate(route = MusicScreen.Welcome.name)
+                    }
+                )
+            }
+            composable(route = MusicScreen.Register.name) {
+                RegistrationScreen(
+                    onLoginWithGoogle = {},
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onNavigateToWelcomeScreen = {
+                        navController.navigate(route = MusicScreen.Welcome.name)
+                    }
+                )
+            }
             composable(route = MusicScreen.Welcome.name) {
                 WelcomeScreen(
                     onWelcomeClick = {
@@ -53,7 +94,7 @@ fun MusicApp(
                     onPlaySongClicked = {
                         if (uiState.currentSong == null) {
                             viewModel.setSong(it)
-                                viewModel.setMusicExoPlayer(context)
+                            viewModel.setMusicExoPlayer(context)
                         }
                         navController.navigate(
                             route = MusicScreen.PlayingSong.name

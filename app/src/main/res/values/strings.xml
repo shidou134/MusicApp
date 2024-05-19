@@ -17,4 +17,32 @@
     <string name="welcome">Welcome</string>
     <string name="recommend_for_you">Recommend for you</string>
     <string name="google">Google</string>
+    <string name="empty_string"/>
+    <string name="or_login_with_label">or login with</string>
+    <string name="button_back">Back</string>
+
+    <!--Login-->
+    <string name="login_email_id_or_phone_label">Email ID or Mobile Number</string>
+    <string name="login_password_label">Password</string>
+    <string name="login_button_text">Login</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="icon_password_visible">Password Visible</string>
+    <string name="icon_password_hidden">Password Hidden</string>
+    <string name="login_error_msg_empty_email_mobile">Please enter your email or mobile number</string>
+    <string name="login_error_msg_empty_password">Please enter your password</string>
+    <string name="login_with_google">Login with Google</string>
+
+    <!--Registration-->
+    <string name="do_not_have_account">Don\'t have an account?</string>
+    <string name="registration_heading_text">Registration</string>
+    <string name="registration_email_label">Email ID</string>
+    <string name="registration_mobile_label">Mobile Number</string>
+    <string name="registration_confirm_password_label">Confirm Password</string>
+    <string name="registration_button_text">Register</string>
+    <string name="back_to_login">Back to Login</string>
+    <string name="registration_error_msg_empty_email">Please enter your email id</string>
+    <string name="registration_error_msg_empty_mobile">Please enter your mobile number</string>
+    <string name="registration_error_msg_empty_confirm_password">Please confirm your password</string>
+    <string name="registration_error_msg_password_mismatch">Please enter the same password here as above</string>
+    <string name="registration_create_account_label">Create Account</string>
 </resources>
