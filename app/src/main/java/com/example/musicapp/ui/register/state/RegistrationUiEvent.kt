@@ -20,7 +20,6 @@ val mobileNumberEmptyErrorState = ErrorState(
     errorMessageStringResource = R.string.registration_error_msg_empty_mobile
 )
 
-
 val confirmPasswordEmptyErrorState = ErrorState(
     hasError = true,
     errorMessageStringResource = R.string.registration_error_msg_empty_confirm_password

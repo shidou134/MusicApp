@@ -14,9 +14,6 @@ class LoginViewModel : ViewModel() {
     var loginState = mutableStateOf(LoginState())
         private set
 
-    /**
-     * Function called on any login event [LoginUiEvent]
-     */
     fun onUiEvent(loginUiEvent: LoginUiEvent) {
         when (loginUiEvent) {
 

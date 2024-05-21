@@ -1,13 +1,11 @@
 package com.example.musicapp.ui.login.view
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -22,17 +20,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.musicapp.R
 import com.example.musicapp.common.FooterText
 import com.example.musicapp.common.LoginwithGoogleButton
 import com.example.musicapp.common.MediumTitleText
-import com.example.musicapp.common.TitleText
 import com.example.musicapp.ui.login.state.LoginUiEvent
 import com.example.musicapp.ui.login.viewmodel.LoginViewModel
 import com.example.musicapp.ui.theme.MusicAppTheme

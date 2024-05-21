@@ -16,9 +16,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.musicapp.data.DataSource
 import com.example.musicapp.ui.OnBroadingScreen
 import com.example.musicapp.ui.PlayingSongScreen
-import com.example.musicapp.ui.SongScreen
+import com.example.musicapp.ui.home.SongScreen
 import com.example.musicapp.ui.viewModel.SongViewModel
-import com.example.musicapp.ui.WelcomeScreen
+import com.example.musicapp.ui.home.WelcomeScreen
+import com.example.musicapp.ui.login.resetpassword.view.ResetPasswordScreen
 import com.example.musicapp.ui.login.view.LoginScreen
 import com.example.musicapp.ui.register.view.RegistrationScreen
 
@@ -26,6 +27,7 @@ enum class MusicScreen {
     OnBoarding,
     Login,
     Register,
+    ResetPassword,
     Welcome,
     Song,
     PlayingSong
@@ -63,7 +65,9 @@ fun MusicApp(
                         navController.navigate(route = MusicScreen.Register.name)
                     },
                     onLoginWithGoogle = {},
-                    onNavigateToForgotPassword = {},
+                    onNavigateToForgotPassword = {
+                        navController.navigate(route = MusicScreen.ResetPassword.name)
+                    },
                     onNavigateToWelcomeScreen = {
                         navController.navigate(route = MusicScreen.Welcome.name)
                     }
@@ -75,8 +79,20 @@ fun MusicApp(
                     onNavigateBack = {
                         navController.popBackStack()
                     },
-                    onNavigateToWelcomeScreen = {
-                        navController.navigate(route = MusicScreen.Welcome.name)
+                    onNavigateToLoginScreen = {
+                        navController.navigate(route = MusicScreen.Login.name)
+                    }
+                )
+            }
+            composable(route = MusicScreen.ResetPassword.name) {
+                ResetPasswordScreen(
+                    onNavigateBack = {
+                        navController.popBackStack()
+                    },
+                    onLoginWithGoogle = {},
+                    onNavigateToLoginScreen = {
+                        navController.navigate(route = MusicScreen.Login.name)
+
                     }
                 )
             }
