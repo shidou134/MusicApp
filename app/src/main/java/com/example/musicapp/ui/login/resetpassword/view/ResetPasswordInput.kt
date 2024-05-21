@@ -27,11 +27,11 @@ fun ResetPasswordInput(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = dimensionResource(R.dimen.padding_large)),
-            value = resetPasswordState.emailOrMobile,
+            value = resetPasswordState.email,
             onValueChange = onEmailOrMobileChange,
-            label = stringResource(id = R.string.login_email_id_or_phone_label),
-            isError = resetPasswordState.errorState.emailOrMobileErrorState.hasError,
-            errorText = stringResource(id = resetPasswordState.errorState.emailOrMobileErrorState.errorMessageStringResource)
+            label = stringResource(id = R.string.registration_email_label),
+            isError = resetPasswordState.errorState.emailErrorState.hasError,
+            errorText = stringResource(id = resetPasswordState.errorState.emailErrorState.errorMessageStringResource)
         )
 
         LoginButton(

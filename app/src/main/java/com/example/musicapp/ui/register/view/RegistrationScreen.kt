@@ -89,13 +89,6 @@ fun RegistrationScreen(
                             )
                         )
                     },
-                    onMobileNumberChange = { inputString ->
-                        registrationViewModel.onUiEvent(
-                            registrationUiEvent = RegistrationUiEvent.MobileNumberChanged(
-                                inputValue = inputString
-                            )
-                        )
-                    },
                     onPasswordChange = { inputString ->
                         registrationViewModel.onUiEvent(
                             registrationUiEvent = RegistrationUiEvent.PasswordChanged(

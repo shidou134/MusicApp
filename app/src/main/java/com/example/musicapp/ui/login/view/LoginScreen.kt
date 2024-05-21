@@ -80,7 +80,7 @@ fun LoginScreen(
                     loginState = loginState,
                     onEmailOrMobileChange = { inputString ->
                         loginViewModel.onUiEvent(
-                            loginUiEvent = LoginUiEvent.EmailOrMobileChanged(
+                            loginUiEvent = LoginUiEvent.EmailChanged(
                                 inputString
                             )
                         )

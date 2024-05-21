@@ -19,7 +19,6 @@ import com.example.musicapp.ui.register.state.RegistrationState
 fun RegistrationInputs(
     registrationState: RegistrationState,
     onEmailIdChange: (String) -> Unit,
-    onMobileNumberChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
     onSubmit: () -> Unit,
@@ -39,20 +38,6 @@ fun RegistrationInputs(
             errorText = stringResource(id = registrationState.errorState.emailIdErrorState.errorMessageStringResource),
             imeAction = ImeAction.Next
         )
-
-        // Mobile Number
-        MobileNumberTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = dimensionResource(R.dimen.padding_large)),
-            value = registrationState.mobileNumber,
-            onValueChange = onMobileNumberChange,
-            label = stringResource(id = R.string.registration_mobile_label),
-            isError = registrationState.errorState.mobileNumberErrorState.hasError,
-            errorText = stringResource(id = registrationState.errorState.mobileNumberErrorState.errorMessageStringResource),
-            imeAction = ImeAction.Next
-        )
-
 
         // Password
         PasswordTextField(

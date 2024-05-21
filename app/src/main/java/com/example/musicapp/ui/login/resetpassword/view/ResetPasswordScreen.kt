@@ -97,7 +97,7 @@ fun ResetPasswordScreen(
                     resetPasswordState = resetPasswordState,
                     onEmailOrMobileChange = { inputString ->
                         resetPasswordViewModel.onUiEvent(
-                            resetPasswordUiEvent = ResetPasswordUiEvent.EmailOrMobileChanged(
+                            resetPasswordUiEvent = ResetPasswordUiEvent.EmailChanged(
                                 inputString
                             )
                         )

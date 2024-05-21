@@ -36,11 +36,11 @@ fun LoginInputs(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = dimensionResource(R.dimen.padding_large)),
-            value = loginState.emailOrMobile,
+            value = loginState.email,
             onValueChange = onEmailOrMobileChange,
-            label = stringResource(id = R.string.login_email_id_or_phone_label),
-            isError = loginState.errorState.emailOrMobileErrorState.hasError,
-            errorText = stringResource(id = loginState.errorState.emailOrMobileErrorState.errorMessageStringResource)
+            label = stringResource(id = R.string.registration_email_label),
+            isError = loginState.errorState.emailErrorState.hasError,
+            errorText = stringResource(id = loginState.errorState.emailErrorState.errorMessageStringResource)
         )
 
 

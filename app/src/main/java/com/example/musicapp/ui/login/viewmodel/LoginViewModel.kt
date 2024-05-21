@@ -6,7 +6,7 @@ import com.example.musicapp.ui.ErrorState
 import com.example.musicapp.ui.login.state.LoginErrorState
 import com.example.musicapp.ui.login.state.LoginState
 import com.example.musicapp.ui.login.state.LoginUiEvent
-import com.example.musicapp.ui.login.state.emailOrMobileEmptyErrorState
+import com.example.musicapp.ui.login.state.emailEmptyErrorState
 import com.example.musicapp.ui.login.state.passwordEmptyErrorState
 
 class LoginViewModel : ViewModel() {
@@ -18,14 +18,14 @@ class LoginViewModel : ViewModel() {
         when (loginUiEvent) {
 
             // Email/Mobile changed
-            is LoginUiEvent.EmailOrMobileChanged -> {
+            is LoginUiEvent.EmailChanged -> {
                 loginState.value = loginState.value.copy(
-                    emailOrMobile = loginUiEvent.inputValue,
+                    email = loginUiEvent.inputValue,
                     errorState = loginState.value.errorState.copy(
-                        emailOrMobileErrorState = if (loginUiEvent.inputValue.trim().isNotEmpty())
+                        emailErrorState = if (loginUiEvent.inputValue.trim().isNotEmpty())
                             ErrorState()
                         else
-                            emailOrMobileEmptyErrorState
+                            emailEmptyErrorState
                     )
                 )
             }
@@ -61,7 +61,7 @@ class LoginViewModel : ViewModel() {
      * @return false -> inputs are invalid
      */
     private fun validateInputs(): Boolean {
-        val emailOrMobileString = loginState.value.emailOrMobile.trim()
+        val emailOrMobileString = loginState.value.email.trim()
         val passwordString = loginState.value.password
         return when {
 
@@ -69,7 +69,7 @@ class LoginViewModel : ViewModel() {
             emailOrMobileString.isEmpty() -> {
                 loginState.value = loginState.value.copy(
                     errorState = LoginErrorState(
-                        emailOrMobileErrorState = emailOrMobileEmptyErrorState
+                        emailErrorState = emailEmptyErrorState
                     )
                 )
                 false

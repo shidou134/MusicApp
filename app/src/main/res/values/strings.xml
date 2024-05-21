@@ -22,14 +22,12 @@
     <string name="button_back">Back</string>
 
     <!--Login-->
-    <string name="login_email_id_or_phone_label">Email ID or Mobile Number</string>
     <string name="login_password_label">Password</string>
     <string name="login_button_text">Login</string>
     <string name="forgot_password">Forgot Password?</string>
     <string name="reset_password">Reset Password</string>
     <string name="icon_password_visible">Password Visible</string>
     <string name="icon_password_hidden">Password Hidden</string>
-    <string name="login_error_msg_empty_email_mobile">Please enter your email or mobile number</string>
     <string name="login_error_msg_empty_password">Please enter your password</string>
     <string name="login_with_google">Login with Google</string>
 
@@ -46,6 +44,9 @@
     <string name="registration_error_msg_empty_confirm_password">Please confirm your password</string>
     <string name="registration_error_msg_password_mismatch">Please enter the same password here as above</string>
     <string name="registration_create_account_label">Create Account</string>
+    <string name="registration_error_msg_invalid_email">Your email id is invalid</string>
+    <string name="registration_error_msg_invalid_mobile">Your mobile number is invalid</string>"
+    <string name="registration_error_msg_invalid_password">Password must be at least 8 characters long</string>
 
 
 </resources>

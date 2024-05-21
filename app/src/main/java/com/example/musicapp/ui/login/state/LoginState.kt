@@ -3,7 +3,7 @@ package com.example.musicapp.ui.login.state
 import com.example.musicapp.ui.ErrorState
 
 data class LoginState(
-    val emailOrMobile: String = "",
+    val email: String = "",
     val password: String = "",
     val errorState: LoginErrorState = LoginErrorState(),
     val isLoginSuccessful: Boolean = false
@@ -14,6 +14,6 @@ data class LoginState(
  * text field validation errors
  */
 data class LoginErrorState(
-    val emailOrMobileErrorState: ErrorState = ErrorState(),
+    val emailErrorState: ErrorState = ErrorState(),
     val passwordErrorState: ErrorState = ErrorState()
 )

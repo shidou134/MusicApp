@@ -22,6 +22,7 @@ import com.example.musicapp.ui.home.WelcomeScreen
 import com.example.musicapp.ui.login.resetpassword.view.ResetPasswordScreen
 import com.example.musicapp.ui.login.view.LoginScreen
 import com.example.musicapp.ui.register.view.RegistrationScreen
+import com.google.firebase.auth.FirebaseAuth
 
 enum class MusicScreen {
     OnBoarding,
@@ -40,6 +41,7 @@ fun MusicApp(
     viewModel: SongViewModel = viewModel()
 ) {
     val context = LocalContext.current
+    val mAuth = FirebaseAuth.getInstance()
     Scaffold(modifier = modifier) { paddingValues ->
         val uiState by viewModel.uiState.collectAsState()
         NavHost(

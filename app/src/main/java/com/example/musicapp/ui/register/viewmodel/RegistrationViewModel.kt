@@ -9,13 +9,16 @@ import com.example.musicapp.ui.register.state.RegistrationState
 import com.example.musicapp.ui.register.state.RegistrationUiEvent
 import com.example.musicapp.ui.register.state.confirmPasswordEmptyErrorState
 import com.example.musicapp.ui.register.state.emailEmptyErrorState
-import com.example.musicapp.ui.register.state.mobileNumberEmptyErrorState
+import com.example.musicapp.ui.register.state.emailInvalidErrorState
+import com.example.musicapp.ui.register.state.passwordInvalidErrorState
 import com.example.musicapp.ui.register.state.passwordMismatchErrorState
+import com.google.firebase.auth.FirebaseAuth
 
 class RegistrationViewModel : ViewModel() {
 
     var registrationState = mutableStateOf(RegistrationState())
         private set
+    private var mAuth = FirebaseAuth.getInstance()
 
     /**
      * Function called on any login event [RegistrationUiEvent]
@@ -31,25 +34,6 @@ class RegistrationViewModel : ViewModel() {
                         emailIdErrorState = if (registrationUiEvent.inputValue.trim().isEmpty()) {
                             // Email id empty state
                             emailEmptyErrorState
-                        } else {
-                            // Valid state
-                            ErrorState()
-                        }
-
-                    )
-                )
-            }
-
-            // Mobile Number changed event
-            is RegistrationUiEvent.MobileNumberChanged -> {
-                registrationState.value = registrationState.value.copy(
-                    mobileNumber = registrationUiEvent.inputValue,
-                    errorState = registrationState.value.errorState.copy(
-                        mobileNumberErrorState = if (registrationUiEvent.inputValue.trim()
-                                .isEmpty()
-                        ) {
-                            // Mobile Number Empty state
-                            mobileNumberEmptyErrorState
                         } else {
                             // Valid state
                             ErrorState()
@@ -121,27 +105,42 @@ class RegistrationViewModel : ViewModel() {
      */
     private fun validateInputs(): Boolean {
         val emailString = registrationState.value.emailId.trim()
-        val mobileNumberString = registrationState.value.mobileNumber.trim()
         val passwordString = registrationState.value.password.trim()
         val confirmPasswordString = registrationState.value.confirmPassword.trim()
 
-        return when {
+//        if(emailString.matches("${"a-zA-Z0-9._-} +@[a-z]+\\.+[a-z]+"))
 
+        if (emailString.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$".toRegex())) {
+                if (passwordString.matches("^(?=\\S+\$).{8,}\$".toRegex())) {
+                    mAuth.createUserWithEmailAndPassword(emailString, passwordString).addOnSuccessListener{
+                        registrationState.value = registrationState.value.copy(isRegistrationSuccessful = true)
+                    }.addOnFailureListener{
+                        registrationState.value = registrationState.value.copy(isRegistrationSuccessful = false)
+                    }
+
+                } else {
+                    registrationState.value = registrationState.value.copy(
+                        errorState = RegistrationErrorState(
+                            passwordErrorState = passwordInvalidErrorState
+                        )
+                    )
+                    return false
+                }
+        } else {
+            registrationState.value = registrationState.value.copy(
+                errorState = RegistrationErrorState(
+                    emailIdErrorState = emailInvalidErrorState
+                )
+            )
+            return false
+        }
+
+        return when {
             // Email empty
             emailString.isEmpty() -> {
                 registrationState.value = registrationState.value.copy(
                     errorState = RegistrationErrorState(
                         emailIdErrorState = emailEmptyErrorState
-                    )
-                )
-                false
-            }
-
-            //Mobile Number Empty
-            mobileNumberString.isEmpty() -> {
-                registrationState.value = registrationState.value.copy(
-                    errorState = RegistrationErrorState(
-                        mobileNumberErrorState = mobileNumberEmptyErrorState
                     )
                 )
                 false
