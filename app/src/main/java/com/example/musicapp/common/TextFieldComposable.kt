@@ -2,7 +2,6 @@ package com.example.musicapp.common
 
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -16,10 +15,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import com.example.musicapp.R
 
-/**
- * Password Text Field
- */
-@OptIn(ExperimentalComposeUiApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun PasswordTextField(
     modifier: Modifier = Modifier,
@@ -86,10 +82,7 @@ fun PasswordTextField(
     )
 }
 
-/**
- * Email Text Field
- */
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun EmailTextField(
     modifier: Modifier = Modifier,

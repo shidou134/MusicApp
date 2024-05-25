@@ -17,11 +17,8 @@ class ResetPasswordViewModel: ViewModel(){
 
     var resetPasswordState = mutableStateOf(ResetPasswordState())
         private set
-    private val mAuth = FirebaseAuth.getInstance()
+    private val mAuth = Firebase.auth
 
-    /**
-     * Function called on any login event [LoginUiEvent]
-     */
     fun onUiEvent(resetPasswordUiEvent: ResetPasswordUiEvent) {
         when (resetPasswordUiEvent) {
 
@@ -42,19 +39,12 @@ class ResetPasswordViewModel: ViewModel(){
             is ResetPasswordUiEvent.Submit -> {
                 val inputsValidated = validateInputs()
                 if (inputsValidated) {
-                    // TODO Trigger login in authentication flow
                     resetPasswordState.value = resetPasswordState.value.copy(isSuccessful = true)
                 }
             }
         }
     }
 
-    /**
-     * Function to validate inputs
-     * Ideally it should be on domain layer (usecase)
-     * @return true -> inputs are valid
-     * @return false -> inputs are invalid
-     */
     private fun validateInputs(): Boolean {
         val emailString = resetPasswordState.value.email.trim()
         return when {
@@ -67,7 +57,6 @@ class ResetPasswordViewModel: ViewModel(){
                 )
                 false
             }
-            // No errors
             else -> {
                 mAuth.sendPasswordResetEmail(emailString).addOnSuccessListener{
                     resetPasswordState.value = resetPasswordState.value.copy(

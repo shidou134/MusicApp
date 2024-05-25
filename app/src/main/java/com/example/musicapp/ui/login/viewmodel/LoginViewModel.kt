@@ -9,13 +9,14 @@ import com.example.musicapp.ui.ErrorState
 import com.example.musicapp.ui.login.state.LoginErrorState
 import com.example.musicapp.ui.login.state.LoginState
 import com.example.musicapp.ui.login.state.LoginUiEvent
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.Firebase
+import com.google.firebase.auth.auth
 
 class LoginViewModel : ViewModel() {
 
     var loginState = mutableStateOf(LoginState())
         private set
-    private val mAuth = FirebaseAuth.getInstance()
+    private val mAuth = Firebase.auth
     fun onUiEvent(loginUiEvent: LoginUiEvent) {
         when (loginUiEvent) {
 
@@ -46,19 +47,12 @@ class LoginViewModel : ViewModel() {
             is LoginUiEvent.Submit -> {
                 val inputsValidated = validateInputs()
                 if (inputsValidated) {
-                    // TODO Trigger login in authentication flow
                     loginState.value = loginState.value.copy(isLoginSuccessful = true)
                 }
             }
         }
     }
 
-    /**
-     * Function to validate inputs
-     * Ideally it should be on domain layer (usecase)
-     * @return true -> inputs are valid
-     * @return false -> inputs are invalid
-     */
     private fun validateInputs(): Boolean {
         val emailString = loginState.value.email.trim()
         val passwordString = loginState.value.password

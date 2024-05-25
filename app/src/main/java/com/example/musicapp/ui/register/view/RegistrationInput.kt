@@ -23,10 +23,8 @@ fun RegistrationInputs(
     onConfirmPasswordChange: (String) -> Unit,
     onSubmit: () -> Unit,
 ) {
-    // Login Inputs Section
     Column(modifier = Modifier.fillMaxWidth()) {
 
-        // Email ID
         EmailTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -39,7 +37,6 @@ fun RegistrationInputs(
             imeAction = ImeAction.Next
         )
 
-        // Password
         PasswordTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -52,7 +49,6 @@ fun RegistrationInputs(
             imeAction = ImeAction.Next
         )
 
-        // Confirm Password
         PasswordTextField(
             modifier = Modifier
                 .fillMaxWidth()
@@ -65,7 +61,6 @@ fun RegistrationInputs(
             imeAction = ImeAction.Done
         )
 
-        // Registration Submit Button
         LoginButton(
             modifier = Modifier.fillMaxWidth()
                 .padding(top = dimensionResource(R.dimen.padding_medium)),

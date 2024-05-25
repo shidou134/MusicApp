@@ -10,8 +10,8 @@ import com.example.musicapp.R
 
 // Set of Material typography styles to start with
 val montserrat = FontFamily(
-    Font(R.font.montserrat_bold, FontWeight.Bold),
-    Font(R.font.montserrat_regular)
+    Font(R.font.inter_bold, FontWeight.Bold),
+    Font(R.font.inter_regular)
 
 )
 val Typography = Typography(

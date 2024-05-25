@@ -22,7 +22,9 @@ import com.example.musicapp.ui.home.WelcomeScreen
 import com.example.musicapp.ui.login.resetpassword.view.ResetPasswordScreen
 import com.example.musicapp.ui.login.view.LoginScreen
 import com.example.musicapp.ui.register.view.RegistrationScreen
+import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 enum class MusicScreen {
     OnBoarding,
@@ -40,13 +42,13 @@ fun MusicApp(
     navController: NavHostController = rememberNavController(),
     viewModel: SongViewModel = viewModel()
 ) {
+    val mAuth = Firebase.auth
     val context = LocalContext.current
-    val mAuth = FirebaseAuth.getInstance()
     Scaffold(modifier = modifier) { paddingValues ->
         val uiState by viewModel.uiState.collectAsState()
         NavHost(
             navController = navController,
-            startDestination = MusicScreen.OnBoarding.name,
+            startDestination = if (mAuth.currentUser == null) MusicScreen.OnBoarding.name else MusicScreen.Welcome.name,
             modifier = Modifier.padding(paddingValues)
         ) {
             composable(route = MusicScreen.OnBoarding.name) {
