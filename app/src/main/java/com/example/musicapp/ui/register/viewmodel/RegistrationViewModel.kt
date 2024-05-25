@@ -2,17 +2,22 @@ package com.example.musicapp.ui.register.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.musicapp.common.confirmPasswordEmptyErrorState
+import com.example.musicapp.common.emailEmptyErrorState
+import com.example.musicapp.common.emailInvalidRegistrationErrorState
+import com.example.musicapp.common.passwordEmptyErrorState
+import com.example.musicapp.common.passwordInvalidErrorState
+import com.example.musicapp.common.passwordMismatchErrorState
+import com.example.musicapp.model.SongUiState
 import com.example.musicapp.ui.ErrorState
-import com.example.musicapp.ui.login.state.passwordEmptyErrorState
 import com.example.musicapp.ui.register.state.RegistrationErrorState
 import com.example.musicapp.ui.register.state.RegistrationState
 import com.example.musicapp.ui.register.state.RegistrationUiEvent
-import com.example.musicapp.ui.register.state.confirmPasswordEmptyErrorState
-import com.example.musicapp.ui.register.state.emailEmptyErrorState
-import com.example.musicapp.ui.register.state.emailInvalidErrorState
-import com.example.musicapp.ui.register.state.passwordInvalidErrorState
-import com.example.musicapp.ui.register.state.passwordMismatchErrorState
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import java.util.prefs.Preferences
 
 class RegistrationViewModel : ViewModel() {
 
@@ -103,40 +108,15 @@ class RegistrationViewModel : ViewModel() {
      * @return true -> inputs are valid
      * @return false -> inputs are invalid
      */
+    private fun isEmailValid(email: String): Boolean {
+        return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
     private fun validateInputs(): Boolean {
         val emailString = registrationState.value.emailId.trim()
         val passwordString = registrationState.value.password.trim()
         val confirmPasswordString = registrationState.value.confirmPassword.trim()
 
-//        if(emailString.matches("${"a-zA-Z0-9._-} +@[a-z]+\\.+[a-z]+"))
-
-        if (emailString.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$".toRegex())) {
-                if (passwordString.matches("^(?=\\S+\$).{8,}\$".toRegex())) {
-                    mAuth.createUserWithEmailAndPassword(emailString, passwordString).addOnSuccessListener{
-                        registrationState.value = registrationState.value.copy(isRegistrationSuccessful = true)
-                    }.addOnFailureListener{
-                        registrationState.value = registrationState.value.copy(isRegistrationSuccessful = false)
-                    }
-
-                } else {
-                    registrationState.value = registrationState.value.copy(
-                        errorState = RegistrationErrorState(
-                            passwordErrorState = passwordInvalidErrorState
-                        )
-                    )
-                    return false
-                }
-        } else {
-            registrationState.value = registrationState.value.copy(
-                errorState = RegistrationErrorState(
-                    emailIdErrorState = emailInvalidErrorState
-                )
-            )
-            return false
-        }
-
         return when {
-            // Email empty
             emailString.isEmpty() -> {
                 registrationState.value = registrationState.value.copy(
                     errorState = RegistrationErrorState(
@@ -146,7 +126,24 @@ class RegistrationViewModel : ViewModel() {
                 false
             }
 
-            //Password Empty
+//            !emailString.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\$".toRegex()) -> {
+//                registrationState.value = registrationState.value.copy(
+//                    errorState = RegistrationErrorState(
+//                        emailIdErrorState = emailInvalidRegistrationErrorState
+//                    )
+//                )
+//                false
+//            }
+
+            !isEmailValid(emailString) -> {
+                registrationState.value = registrationState.value.copy(
+                    errorState = RegistrationErrorState(
+                        emailIdErrorState = emailInvalidRegistrationErrorState
+                    )
+                )
+                false
+            }
+
             passwordString.isEmpty() -> {
                 registrationState.value = registrationState.value.copy(
                     errorState = RegistrationErrorState(
@@ -156,7 +153,15 @@ class RegistrationViewModel : ViewModel() {
                 false
             }
 
-            //Confirm Password Empty
+            !passwordString.matches("^(?=\\S+\$).{8,}\$".toRegex()) -> {
+                registrationState.value = registrationState.value.copy(
+                    errorState = RegistrationErrorState(
+                        passwordErrorState = passwordInvalidErrorState
+                    )
+                )
+                false
+            }
+
             confirmPasswordString.isEmpty() -> {
                 registrationState.value = registrationState.value.copy(
                     errorState = RegistrationErrorState(
@@ -166,7 +171,6 @@ class RegistrationViewModel : ViewModel() {
                 false
             }
 
-            // Password and Confirm Password are different
             passwordString != confirmPasswordString -> {
                 registrationState.value = registrationState.value.copy(
                     errorState = RegistrationErrorState(
@@ -176,13 +180,13 @@ class RegistrationViewModel : ViewModel() {
                 false
             }
 
-            // No errors
             else -> {
-                // Set default error state
+                mAuth.createUserWithEmailAndPassword(emailString, passwordString)
                 registrationState.value =
                     registrationState.value.copy(errorState = RegistrationErrorState())
                 true
             }
         }
     }
+
 }

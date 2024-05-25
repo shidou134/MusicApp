@@ -2,17 +2,22 @@ package com.example.musicapp.ui.login.resetpassword.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.musicapp.common.emailEmptyErrorState
+import com.example.musicapp.common.emailInvalidLoginErrorState
 import com.example.musicapp.ui.ErrorState
 import com.example.musicapp.ui.login.resetpassword.state.ResetPasswordErrorState
 import com.example.musicapp.ui.login.resetpassword.state.ResetPasswordState
 import com.example.musicapp.ui.login.resetpassword.state.ResetPasswordUiEvent
 import com.example.musicapp.ui.login.state.LoginUiEvent
-import com.example.musicapp.ui.login.state.emailEmptyErrorState
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 class ResetPasswordViewModel: ViewModel(){
 
     var resetPasswordState = mutableStateOf(ResetPasswordState())
         private set
+    private val mAuth = FirebaseAuth.getInstance()
 
     /**
      * Function called on any login event [LoginUiEvent]
@@ -51,11 +56,10 @@ class ResetPasswordViewModel: ViewModel(){
      * @return false -> inputs are invalid
      */
     private fun validateInputs(): Boolean {
-        val emailOrMobileString = resetPasswordState.value.email.trim()
+        val emailString = resetPasswordState.value.email.trim()
         return when {
 
-            // Email/Mobile empty
-            emailOrMobileString.isEmpty() -> {
+            emailString.isEmpty() -> {
                 resetPasswordState.value = resetPasswordState.value.copy(
                     errorState = ResetPasswordErrorState(
                         emailErrorState = emailEmptyErrorState
@@ -65,9 +69,19 @@ class ResetPasswordViewModel: ViewModel(){
             }
             // No errors
             else -> {
-                // Set default error state
+                mAuth.sendPasswordResetEmail(emailString).addOnSuccessListener{
+                    resetPasswordState.value = resetPasswordState.value.copy(
+                        isSuccessful = true
+                    )
+                }.addOnFailureListener {
+                    resetPasswordState.value = resetPasswordState.value.copy(
+                        errorState = ResetPasswordErrorState(
+                            emailErrorState = emailInvalidLoginErrorState
+                        )
+                    )
+                }
                 resetPasswordState.value = resetPasswordState.value.copy(errorState = ResetPasswordErrorState())
-                true
+                resetPasswordState.value.isSuccessful
             }
         }
     }

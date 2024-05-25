@@ -2,22 +2,23 @@ package com.example.musicapp.ui.login.viewmodel
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
+import com.example.musicapp.common.emailEmptyErrorState
+import com.example.musicapp.common.emailInvalidLoginErrorState
+import com.example.musicapp.common.passwordEmptyErrorState
 import com.example.musicapp.ui.ErrorState
 import com.example.musicapp.ui.login.state.LoginErrorState
 import com.example.musicapp.ui.login.state.LoginState
 import com.example.musicapp.ui.login.state.LoginUiEvent
-import com.example.musicapp.ui.login.state.emailEmptyErrorState
-import com.example.musicapp.ui.login.state.passwordEmptyErrorState
+import com.google.firebase.auth.FirebaseAuth
 
 class LoginViewModel : ViewModel() {
 
     var loginState = mutableStateOf(LoginState())
         private set
-
+    private val mAuth = FirebaseAuth.getInstance()
     fun onUiEvent(loginUiEvent: LoginUiEvent) {
         when (loginUiEvent) {
 
-            // Email/Mobile changed
             is LoginUiEvent.EmailChanged -> {
                 loginState.value = loginState.value.copy(
                     email = loginUiEvent.inputValue,
@@ -30,7 +31,6 @@ class LoginViewModel : ViewModel() {
                 )
             }
 
-            // Password changed
             is LoginUiEvent.PasswordChanged -> {
                 loginState.value = loginState.value.copy(
                     password = loginUiEvent.inputValue,
@@ -43,7 +43,6 @@ class LoginViewModel : ViewModel() {
                 )
             }
 
-            // Submit Login
             is LoginUiEvent.Submit -> {
                 val inputsValidated = validateInputs()
                 if (inputsValidated) {
@@ -61,12 +60,11 @@ class LoginViewModel : ViewModel() {
      * @return false -> inputs are invalid
      */
     private fun validateInputs(): Boolean {
-        val emailOrMobileString = loginState.value.email.trim()
+        val emailString = loginState.value.email.trim()
         val passwordString = loginState.value.password
         return when {
 
-            // Email/Mobile empty
-            emailOrMobileString.isEmpty() -> {
+            emailString.isEmpty() -> {
                 loginState.value = loginState.value.copy(
                     errorState = LoginErrorState(
                         emailErrorState = emailEmptyErrorState
@@ -75,7 +73,6 @@ class LoginViewModel : ViewModel() {
                 false
             }
 
-            //Password Empty
             passwordString.isEmpty() -> {
                 loginState.value = loginState.value.copy(
                     errorState = LoginErrorState(
@@ -85,11 +82,19 @@ class LoginViewModel : ViewModel() {
                 false
             }
 
-            // No errors
             else -> {
-                // Set default error state
+                mAuth.signInWithEmailAndPassword(emailString, passwordString).addOnSuccessListener {
+                    loginState.value = loginState.value.copy(isLoginSuccessful = true)
+                }.addOnFailureListener {
+                    loginState.value = loginState.value.copy(
+                        isLoginSuccessful = false,
+                        errorState = LoginErrorState(
+                            emailErrorState = emailInvalidLoginErrorState
+                        )
+                    )
+                }
                 loginState.value = loginState.value.copy(errorState = LoginErrorState())
-                true
+                loginState.value.isLoginSuccessful
             }
         }
     }
