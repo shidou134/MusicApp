@@ -1,4 +1,4 @@
-package com.example.musicapp.ui
+package com.example.musicapp.common
 
 import androidx.annotation.StringRes
 import com.example.musicapp.R

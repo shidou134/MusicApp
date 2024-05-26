@@ -1,8 +1,5 @@
 package com.example.musicapp.ui.login.state
 
-import com.example.musicapp.R
-import com.example.musicapp.ui.ErrorState
-
 /**
  * Login Screen Events
  */

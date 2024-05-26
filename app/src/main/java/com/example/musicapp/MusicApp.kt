@@ -116,6 +116,9 @@ fun MusicApp(
                             viewModel.setSong(it)
                             viewModel.setMusicExoPlayer(context)
                         }
+                        else {
+                            viewModel.setSong(it)
+                        }
                         navController.navigate(
                             route = MusicScreen.PlayingSong.name
                         )

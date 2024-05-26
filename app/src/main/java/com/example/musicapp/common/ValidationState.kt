@@ -1,7 +1,6 @@
 package com.example.musicapp.common
 
 import com.example.musicapp.R
-import com.example.musicapp.ui.ErrorState
 
 val emailEmptyErrorState = ErrorState(
     hasError = true,

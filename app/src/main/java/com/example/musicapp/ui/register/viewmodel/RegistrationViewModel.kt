@@ -8,7 +8,7 @@ import com.example.musicapp.common.emailInvalidRegistrationErrorState
 import com.example.musicapp.common.passwordEmptyErrorState
 import com.example.musicapp.common.passwordInvalidErrorState
 import com.example.musicapp.common.passwordMismatchErrorState
-import com.example.musicapp.ui.ErrorState
+import com.example.musicapp.common.ErrorState
 import com.example.musicapp.ui.register.state.RegistrationErrorState
 import com.example.musicapp.ui.register.state.RegistrationState
 import com.example.musicapp.ui.register.state.RegistrationUiEvent

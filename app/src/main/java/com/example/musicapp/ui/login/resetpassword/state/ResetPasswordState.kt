@@ -1,7 +1,6 @@
 package com.example.musicapp.ui.login.resetpassword.state
 
-import com.example.musicapp.ui.ErrorState
-import com.example.musicapp.ui.login.state.LoginErrorState
+import com.example.musicapp.common.ErrorState
 
 data class ResetPasswordState(
     val email: String = "",

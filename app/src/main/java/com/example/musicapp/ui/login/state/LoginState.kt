@@ -1,6 +1,6 @@
 package com.example.musicapp.ui.login.state
 
-import com.example.musicapp.ui.ErrorState
+import com.example.musicapp.common.ErrorState
 
 data class LoginState(
     val email: String = "",

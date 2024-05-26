@@ -1,6 +1,5 @@
 package com.example.musicapp.data
 
-import androidx.compose.ui.res.stringResource
 import com.example.musicapp.R
 import com.example.musicapp.model.Song
 
@@ -11,7 +10,7 @@ object DataSource {
             name = R.string.co_quen_duoc_dau,
             image = R.drawable.co_quen_duoc_dau,
             duration = 254,
-            url = "https://firebasestorage.googleapis.com/v0/b/music-app-2524d.appspot.com/o/music%2FCoQuenDuocDau-ThanhThao-8969228.mp3?alt=media&token=f7acdfb9-d0eb-4703-ac69-86719e76cec9"
+            url = "https://cdns-preview-6.dzcdn.net/stream/c-6069a0595e64d376279f1204182c4561-1.mp3"
         ),
         Song(
             artist = R.string.tran_thu_ha,

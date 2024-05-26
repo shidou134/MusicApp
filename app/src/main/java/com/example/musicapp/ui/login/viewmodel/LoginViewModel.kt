@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.musicapp.common.emailEmptyErrorState
 import com.example.musicapp.common.emailInvalidLoginErrorState
 import com.example.musicapp.common.passwordEmptyErrorState
-import com.example.musicapp.ui.ErrorState
+import com.example.musicapp.common.ErrorState
 import com.example.musicapp.ui.login.state.LoginErrorState
 import com.example.musicapp.ui.login.state.LoginState
 import com.example.musicapp.ui.login.state.LoginUiEvent
