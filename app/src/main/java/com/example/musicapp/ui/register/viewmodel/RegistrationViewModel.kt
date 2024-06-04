@@ -13,15 +13,18 @@ import com.example.musicapp.ui.register.state.RegistrationErrorState
 import com.example.musicapp.ui.register.state.RegistrationState
 import com.example.musicapp.ui.register.state.RegistrationUiEvent
 import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
 
 class RegistrationViewModel : ViewModel() {
 
     var registrationState = mutableStateOf(RegistrationState())
         private set
-    private val mAuth = Firebase.auth
-    private val db = Firebase.firestore
+    private val mAuth = FirebaseAuth.getInstance()
+    private val db = FirebaseFirestore.getInstance()
 
     fun onUiEvent(registrationUiEvent: RegistrationUiEvent) {
         when (registrationUiEvent) {

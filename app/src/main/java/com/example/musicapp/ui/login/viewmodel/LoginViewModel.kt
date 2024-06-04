@@ -9,14 +9,13 @@ import com.example.musicapp.common.ErrorState
 import com.example.musicapp.ui.login.state.LoginErrorState
 import com.example.musicapp.ui.login.state.LoginState
 import com.example.musicapp.ui.login.state.LoginUiEvent
-import com.google.firebase.Firebase
-import com.google.firebase.auth.auth
+import com.google.firebase.auth.FirebaseAuth
 
 class LoginViewModel : ViewModel() {
 
     var loginState = mutableStateOf(LoginState())
         private set
-    private val mAuth = Firebase.auth
+    private val mAuth = FirebaseAuth.getInstance()
     fun onUiEvent(loginUiEvent: LoginUiEvent) {
         when (loginUiEvent) {
 

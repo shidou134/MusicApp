@@ -21,7 +21,6 @@
     <string name="or_login_with_label">or login with</string>
     <string name="button_back">Back</string>
 
-    <!--Login-->
     <string name="login_password_label">Password</string>
     <string name="login_button_text">Login</string>
     <string name="forgot_password">Forgot Password?</string>
@@ -32,7 +31,6 @@
     <string name="login_with_google">Login with Google</string>
     <string name="login_error_msg_email_mismatch">Your email or password is incorrect</string>
 
-    <!--Registration-->
     <string name="do_not_have_account">Don\'t have an account?</string>
     <string name="registration_heading_text">Registration</string>
     <string name="registration_email_label">Email ID</string>
@@ -48,6 +46,31 @@
     <string name="registration_error_msg_invalid_email">Your email id is invalid</string>
     <string name="registration_error_msg_invalid_mobile">Your mobile number is invalid</string>"
     <string name="registration_error_msg_invalid_password">Password must be at least 8 characters long</string>
+
+    <string name="browser_screen_route">Browser</string>
+    <string name="artists_screen_route">Artists</string>
+    <string name="home_screen_route">Home</string>
+    <string name="genres_bag_screen_route">Genres</string>
+    <string name="my_music_screen_route">MyMusic</string>
+
+    <string name="artist_name">Artist</string>
+    <string name="artist_loading_message">Loading</string>
+    <string name="artist_loading_failed">Failed to load</string>
+    <string name="artist_retry">Retry</string>
+
+    <string name="my_music_header_title">My Music</string>
+    <string name="my_music_your_activities_title">Your Activities</string>
+    <string name="my_music_your_playlists_title">Your Playlists</string>
+    <string name="my_music_liked_songs_title">Liked Songs</string>
+    <string name="my_music_follower_artists_title">Followed Artists</string>
+    <string name="my_music_history_title">History</string>
+    
+    <string name="top_song_title">Top songs</string>
+    <string name="top_song_content_description">Song</string>
+
+    <string name="radio_name">Radio</string>
+
+    <string name="my_music_log_out_title">Log out</string>
 
 
 </resources>

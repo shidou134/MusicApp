@@ -31,6 +31,16 @@ val Typography = Typography(
         fontFamily = inter,
         fontWeight = FontWeight.Bold,
         fontSize = 50.sp
+    ),
+    displaySmall =TextStyle(
+        fontFamily = inter,
+        fontWeight = FontWeight.Normal,
+        fontSize = 12.sp
+    ),
+    titleMedium = TextStyle(
+        fontFamily = inter,
+        fontWeight = FontWeight.Bold,
+        fontSize = 27.sp
     )
 
 
