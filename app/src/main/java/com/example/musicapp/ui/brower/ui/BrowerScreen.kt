@@ -136,7 +136,7 @@ fun ArtistSection(
     modifier: Modifier = Modifier
 ) {
     LazyRow(
-        contentPadding = PaddingValues(32.dp)
+        contentPadding = PaddingValues(horizontal = 32.dp)
     ) {
         itemsIndexed(items = artists ?: emptyList()) { index, data ->
             if (index <= 3) {
@@ -157,7 +157,7 @@ fun ArtistItem(
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.padding(8.dp)
+        modifier = modifier.padding(horizontal = 8.dp)
     ) {
         Box(
             modifier = Modifier.size(128.dp)
@@ -188,6 +188,7 @@ fun ArtistItem(
         Text(
             text = artists.name ?: "",
             color = Silver,
+            style = MaterialTheme.typography.displaySmall,
             modifier = Modifier.padding(top = 4.dp)
         )
     }
@@ -240,7 +241,7 @@ fun RadioItem(
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
-            .padding(vertical = 8.dp)
+            .padding(horizontal =  8.dp)
             .clickable {
                 onNavigateToTracks(radio.id ?: 0)
             }
@@ -251,8 +252,8 @@ fun RadioItem(
         Spacer(modifier = Modifier.height(8.dp))
         Text(
             text = radio.title ?: "",
-            style = MaterialTheme.typography.labelSmall,
             color = Silver,
+            style = MaterialTheme.typography.displaySmall,
             modifier = Modifier.padding(horizontal = 8.dp)
                 .align(Alignment.CenterHorizontally)
         )
@@ -272,7 +273,7 @@ fun RadioPhoto(
         contentDescription = stringResource(R.string.radio_name),
         error = painterResource(R.drawable.ic_connection_error),
         placeholder = painterResource(R.drawable.loading_img),
-        modifier = modifier.clip(CircleShape)
+        modifier = modifier.clip(RoundedCornerShape(12.dp))
     )
 
 }

@@ -41,6 +41,11 @@ val Typography = Typography(
         fontFamily = inter,
         fontWeight = FontWeight.Bold,
         fontSize = 27.sp
+    ),
+    titleSmall = TextStyle(
+        fontFamily = inter,
+        fontWeight = FontWeight.Bold,
+        fontSize = 24.sp
     )
 
 

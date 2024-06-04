@@ -126,11 +126,13 @@ fun SectionHeader(title: String, subtitle: String, action: String? = null) {
         Text(
             text = title,
             color = Silver,
+            style = MaterialTheme.typography.titleSmall,
             modifier = Modifier.alignByBaseline()
         )
         Text(
             text = subtitle,
             color = Silver,
+            style = MaterialTheme.typography.labelSmall,
             modifier = Modifier
                 .alignByBaseline()
                 .weight(1f)

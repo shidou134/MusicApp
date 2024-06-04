@@ -168,8 +168,8 @@ fun NavGraph(
                         navController.navigate(route = MainDestinations.Song.name)
                     },
                     onNavigateTop50Songs = {
-                        uiState.type = CommonMethod.RADIO_TYPE
-                        uiState.radioId = it
+                        uiState.type = CommonMethod.ARTIST_TYPE
+                        uiState.artistId = it
                         navController.navigate(route = MainDestinations.Song.name)
                     }
                 )
