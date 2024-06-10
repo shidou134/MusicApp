@@ -11,7 +11,7 @@ interface AppContainer {
     val songRepository:SongRepository
 }
 class DefaultAppContainer : AppContainer {
-    private val baseUrl = "https://api.deezer.com/"
+    private val baseUrl = "https://shidou134.000webhostapp.com/server/"
     private val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
         .addConverterFactory(Json{ignoreUnknownKeys=true}.asConverterFactory("application/json".toMediaType()))

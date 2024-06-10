@@ -1,4 +1,4 @@
-package com.example.musicapp.ui.topsong.viewmodel
+package com.example.musicapp.ui.genre.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,32 +10,30 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import coil.network.HttpException
 import com.example.musicapp.SongApplication
-import com.example.musicapp.common.CommonState
 import com.example.musicapp.data.SongRepository
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-//sealed interface TopSongUiState {
-//    data class Success(val topSong: TopSongModel) : TopSongUiState
-//    data object Loading : TopSongUiState
-//    data object Error : TopSongUiState
+//sealed interface RadioTracksUiState {
+//    data class Success(val radioTracks: RadioSongsModel) : RadioTracksUiState
+//    data object Loading : RadioTracksUiState
+//    data object Error : RadioTracksUiState
 //}
 //
-//class TopSongViewModel(private val songRepository: SongRepository) : ViewModel() {
-//    var topSongUiState: TopSongUiState by mutableStateOf(TopSongUiState.Loading)
+//class RadioTracksViewModel(private val songRepository: SongRepository) : ViewModel() {
+//    var radioTracksUiState: RadioTracksUiState by mutableStateOf(RadioTracksUiState.Loading)
 //        private set
-//    fun getTopSong(id:Long) {
+//    fun getRadioTracks(id:Long) {
 //        viewModelScope.launch {
-//            topSongUiState = TopSongUiState.Loading
-//            topSongUiState = try {
-//                TopSongUiState.Success(
-//                    songRepository.getTopSongs(id)
+//            radioTracksUiState = RadioTracksUiState.Loading
+//            radioTracksUiState = try {
+//                RadioTracksUiState.Success(
+//                    songRepository.getRadioTracks(id)
 //                )
 //            } catch (e: IOException) {
-//                TopSongUiState.Error
+//                RadioTracksUiState.Error
 //            } catch (e: HttpException) {
-//                TopSongUiState.Error
+//                RadioTracksUiState.Error
 //            }
 //        }
 //    }
@@ -46,7 +44,7 @@ import java.io.IOException
 //                val application =
 //                    (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as SongApplication)
 //                val songRepository = application.container.songRepository
-//                TopSongViewModel(songRepository = songRepository)
+//                RadioTracksViewModel(songRepository = songRepository)
 //            }
 //        }
 //    }

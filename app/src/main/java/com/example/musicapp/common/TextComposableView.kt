@@ -96,7 +96,7 @@ fun HeaderSection(title: String, modifier: Modifier = Modifier) {
         )
         Icon(
             painter = painterResource(id = R.drawable.ic_search),
-            contentDescription = "QR Code Scanner",
+            contentDescription = "Search",
             modifier = Modifier.align(Alignment.CenterVertically)
                 .clip(CircleShape)
                 .padding(end = 8.dp)

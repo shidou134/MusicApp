@@ -68,13 +68,13 @@ fun OnBroadingScreen(
             )
         }
         Spacer(modifier = Modifier.padding(vertical = 16.dp))
-        LoginwithGoogleButton(
-            onClick = onLoginWithGoogleClick,
-            modifier = Modifier.fillMaxWidth(),
-            text = stringResource(R.string.login_with_google),
-            imageDescription = stringResource(R.string.google),
-            image = R.drawable.ic_google
-        )
+//        LoginwithGoogleButton(
+//            onClick = onLoginWithGoogleClick,
+//            modifier = Modifier.fillMaxWidth(),
+//            text = stringResource(R.string.login_with_google),
+//            imageDescription = stringResource(R.string.google),
+//            image = R.drawable.ic_google
+//        )
     }
 }
 

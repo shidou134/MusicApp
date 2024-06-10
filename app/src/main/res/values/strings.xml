@@ -67,10 +67,13 @@
     
     <string name="top_song_title">Top songs</string>
     <string name="top_song_content_description">Song</string>
-
-    <string name="radio_name">Radio</string>
+    <string name="topic_name">Topic</string>
+    <string name="playlist_name">Playlist</string>
+    <string name="favourite_song_name">Favourite Song</string>
+    <string name="genre_name">Genre</string>
 
     <string name="my_music_log_out_title">Log out</string>
+
 
 
 </resources>

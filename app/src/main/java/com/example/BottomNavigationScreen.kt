@@ -6,11 +6,8 @@ import androidx.compose.material.icons.rounded.ArtTrack
 import androidx.compose.material.icons.rounded.Audiotrack
 import androidx.compose.material.icons.rounded.Headset
 import androidx.compose.material.icons.rounded.Home
-import androidx.compose.material.icons.rounded.List
-import androidx.compose.material.icons.rounded.Menu
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.vectorResource
 import com.example.musicapp.MainDestinations
 
 import com.example.musicapp.R
@@ -44,7 +41,7 @@ sealed class BottomNavigationScreens(
 
     object Genres :
         BottomNavigationScreens(
-            MainDestinations.Radios.name,
+            MainDestinations.Genre.name,
             R.string.genres_bag_screen_route,
             Icons.Rounded.Audiotrack
         )

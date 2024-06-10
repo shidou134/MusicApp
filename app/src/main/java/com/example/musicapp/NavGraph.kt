@@ -14,26 +14,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.example.musicapp.common.CommonMethod
-import com.example.musicapp.ui.playingsong.view.PlayingSongScreen
-import com.example.musicapp.ui.artist.view.ArtistScreen
-import com.example.musicapp.ui.artist.viewmodel.ArtistViewModel
 import com.example.musicapp.ui.brower.ui.BrowserScreen
 import com.example.musicapp.ui.brower.viewmodel.BrowserViewModel
+import com.example.musicapp.ui.genre.view.GenreScreen
 import com.example.musicapp.ui.home.view.HomeScreen
 import com.example.musicapp.ui.mymusic.view.MyMusicScreen
-import com.example.musicapp.ui.topsong.view.TopSongScreen
-import com.example.musicapp.ui.topsong.viewmodel.TopSongViewModel
-import com.example.musicapp.ui.playingsong.viewModel.SongViewModel
-import com.example.musicapp.ui.radio.view.RadioScreen
-import com.example.musicapp.ui.radio.view.RadioTracksScreen
-import com.example.musicapp.ui.radio.viewmodel.RadioTracksViewModel
-import com.example.musicapp.ui.radio.viewmodel.RadioViewModel
+import com.example.musicapp.ui.genre.viewmodel.GenreViewModel
+import com.example.musicapp.ui.home.HomeViewModel
 
 enum class MainDestinations {
     Browser,
     Artists,
     Home,
-    Radios,
+    Genre,
     MyMusic,
     OnBoarding,
     Login,
@@ -66,95 +59,92 @@ fun NavGraph(
             route = MainDestinations.MainApp.name
         ) {
             composable(route = MainDestinations.Song.name) {
-                when (uiState.type) {
-                    CommonMethod.ARTIST_TYPE -> {
-                        val topSongViewModel: TopSongViewModel =
-                            viewModel(factory = TopSongViewModel.Factory)
-                        LaunchedEffect(true) {
-                            topSongViewModel.getTopSong(uiState.artistId)
-                        }
+//                    CommonMethod.ARTIST_TYPE -> {
+//                        val topSongViewModel: TopSongViewModel =
+//                            viewModel(factory = TopSongViewModel.Factory)
+//                        LaunchedEffect(true) {
+//                            topSongViewModel.getTopSong(uiState.artistId)
+//                        }
+//
+////                        TopSongScreen(
+////                            retryAction = {
+////                                topSongViewModel.getTopSong(uiState.artistId)
+////                            },
+////                            onNavigateBack = {
+////                                navController.popBackStack()
+////                            },
+////                            onNavigateToPlayingSong = {
+//////                                song ->
+//////                                sharedViewModel.setMusicExoPlayer(context, song)
+//////                                Log.d("shidou", "listSongs: ${uiState.listSong.size}")
+//////                                sharedViewModel.setSong(song)
+//////                                navController.navigate(route = MainDestinations.PlayingSong.name)
+////                            },
+////                            topSongState = topSongViewModel.topSongUiState,
+////                            modifier = Modifier.fillMaxSize()
+////                        )
 
-                        TopSongScreen(
-                            retryAction = {
-                                topSongViewModel.getTopSong(uiState.artistId)
-                            },
-                            onNavigateBack = {
-                                navController.popBackStack()
-                            },
-                            onNavigateToPlayingSong = { song ->
-                                sharedViewModel.setMusicExoPlayer(context, song)
-                                Log.d("shidou", "listSongs: ${uiState.listSong.size}")
-                                sharedViewModel.setSong(song)
-                                navController.navigate(route = MainDestinations.PlayingSong.name)
-                            },
-                            topSongState = topSongViewModel.topSongUiState,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
 
-                    CommonMethod.RADIO_TYPE -> {
-                        val radioTrackViewModel: RadioTracksViewModel =
-                            viewModel(factory = RadioTracksViewModel.Factory)
-                        LaunchedEffect(true) {
-                            Log.d("shidou", "before uiState.radioId: ${uiState.radioId}")
-                            radioTrackViewModel.getRadioTracks(uiState.radioId)
-                            Log.d("shidou", "after uiState.radioId: ${uiState.radioId}")
-                        }
-                        RadioTracksScreen(
-                            retryAction = {
-                                radioTrackViewModel.getRadioTracks(uiState.radioId)
-                            },
-                            onNavigateBack = {
-                                navController.popBackStack()
-                            },
-                            onNavigateToPlayingSong = {
-//                                sharedViewModel.setMusicExoPlayer(context, song)
-//                                Log.d("shidou", "listSongs: ${uiState.listSong.size}")
-//                                sharedViewModel.setSong(song)
-//                                navController.navigate(route = MainDestinations.PlayingSong.name)
-                            },
-                            radioTracksState = radioTrackViewModel.radioTracksUiState,
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                }
+//                        val radioTrackViewModel: RadioTracksViewModel =
+//                            viewModel(factory = RadioTracksViewModel.Factory)
+//                        LaunchedEffect(true) {
+//                            radioTrackViewModel.getRadioTracks(uiState.radioId)
+//                        }
+//                        RadioTracksScreen(
+//                            retryAction = {
+//                                radioTrackViewModel.getRadioTracks(uiState.radioId)
+//                            },
+//                            onNavigateBack = {
+//                                navController.popBackStack()
+//                            },
+//                            onNavigateToPlayingSong = {
+////                                sharedViewModel.setMusicExoPlayer(context, song)
+////                                Log.d("shidou", "listSongs: ${uiState.listSong.size}")
+////                                sharedViewModel.setSong(song)
+////                                navController.navigate(route = MainDestinations.PlayingSong.name)
+//                            },
+//                            radioTracksState = radioTrackViewModel.radioTracksUiState,
+//                            modifier = Modifier.fillMaxSize()
+//                        )
+
             }
+
             composable(route = MainDestinations.PlayingSong.name) {
-                val viewModel: SongViewModel = viewModel(factory = SongViewModel.Factory)
-                val playingSongUiState by viewModel.uiState.collectAsState()
-                if (uiState.isSongPlaying) {
-                    sharedViewModel.getCurrentPosition()
-                }
-                PlayingSongScreen(
-                    onClick = {
-                        sharedViewModel.playOrPauseSong()
-                    },
-                    isPlaying = uiState.isSongPlaying,
-                    currentPosition = uiState.currentDuration.toFloat(),
-                    duration = uiState.duration.toFloat(),
-                    onValueChange = {
-                        sharedViewModel.seekTo(it.toLong())
-                    },
-                    onValueChangeFinish = {
-                        sharedViewModel.getCurrentPosition()
-                    },
-                    currentSong = uiState.currentSong!!,
-                    onNextSong = {
-                        sharedViewModel.playNextSong(it)
-                    },
-                    onPreviousSong = {
-                        sharedViewModel.playPreviousSong(it)
-                    },
-                    isLooping = uiState.isLooping,
-                    isShuffle = uiState.isShuffle,
-                    onLoopSong = {
-                        sharedViewModel.loopSong(it)
-                    },
-                    onShuffleSong = {
-                        sharedViewModel.shuffleSong()
-                    },
-                    modifier = Modifier.fillMaxSize()
-                )
+//                val viewModel: SongViewModel = viewModel(factory = SongViewModel.Factory)
+//                val playingSongUiState by viewModel.uiState.collectAsState()
+//                if (uiState.isSongPlaying) {
+//                    sharedViewModel.getCurrentPosition()
+//                }
+//                PlayingSongScreen(
+//                    onClick = {
+//                        sharedViewModel.playOrPauseSong()
+//                    },
+//                    isPlaying = uiState.isSongPlaying,
+//                    currentPosition = uiState.currentDuration.toFloat(),
+//                    duration = uiState.duration.toFloat(),
+//                    onValueChange = {
+//                        sharedViewModel.seekTo(it.toLong())
+//                    },
+//                    onValueChangeFinish = {
+//                        sharedViewModel.getCurrentPosition()
+//                    },
+//                    currentSong = uiState.currentSong!!,
+//                    onNextSong = {
+//                        sharedViewModel.playNextSong(it)
+//                    },
+//                    onPreviousSong = {
+//                        sharedViewModel.playPreviousSong(it)
+//                    },
+//                    isLooping = uiState.isLooping,
+//                    isShuffle = uiState.isShuffle,
+//                    onLoopSong = {
+//                        sharedViewModel.loopSong(it)
+//                    },
+//                    onShuffleSong = {
+//                        sharedViewModel.shuffleSong()
+//                    },
+//                    modifier = Modifier.fillMaxSize()
+//                )
             }
             composable(MainDestinations.Browser.name) {
                 val browserViewModel: BrowserViewModel =
@@ -162,43 +152,54 @@ fun NavGraph(
                 BrowserScreen(
                     browserUiState = browserViewModel.browserUiState,
                     retryAction = browserViewModel::getData,
-                    onNavigateToTracks = {
+                    onNavigateToGenreScreen = {
                         uiState.type = CommonMethod.RADIO_TYPE
-                        uiState.radioId = it
-                        navController.navigate(route = MainDestinations.Song.name)
+                        uiState.topicId = it
+                        navController.navigate(route = MainDestinations.Genre.name)
                     },
                     onNavigateTop50Songs = {
                         uiState.type = CommonMethod.ARTIST_TYPE
-                        uiState.artistId = it
                         navController.navigate(route = MainDestinations.Song.name)
                     }
                 )
             }
             composable(MainDestinations.Artists.name) {
-                val viewModel: ArtistViewModel = viewModel(factory = ArtistViewModel.Factory)
-                Log.d("shidou", "NavGraph: ${uiState.artistId}")
-                ArtistScreen(
-                    retryAction = viewModel::getArtists,
-                    artistState = viewModel.artistUiState,
-                    onNavigateTop50Songs = {
-                        uiState.type = CommonMethod.ARTIST_TYPE
-                        uiState.artistId = it
-                        navController.navigate(route = MainDestinations.Song.name)
-                        Log.d("shidou", "id: $it")
-                    }
-                )
+//                val viewModel: ArtistViewModel = viewModel(factory = ArtistViewModel.Factory)
+//                Log.d("shidou", "NavGraph: ${uiState.artistId}")
+//                ArtistScreen(
+//                    retryAction = viewModel::getArtists,
+//                    artistState = viewModel.artistUiState,
+//                    onNavigateTop50Songs = {
+//                        uiState.type = CommonMethod.ARTIST_TYPE
+//                        uiState.artistId = it
+//                        navController.navigate(route = MainDestinations.Song.name)
+//                        Log.d("shidou", "id: $it")
+//                    }
+//                )
             }
             composable(MainDestinations.Home.name) {
-                HomeScreen()
+                val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
+                HomeScreen(
+                    homeUiState = homeViewModel.homeUiState,
+                    retryAction = homeViewModel::getData,
+                    onNavigateTop50Songs = {
+
+                    },
+                    onNavigateToTracks = {}
+                )
             }
-            composable(MainDestinations.Radios.name) {
-                val viewModel: RadioViewModel = viewModel(factory = RadioViewModel.Factory)
-                RadioScreen(
-                    retryAction = viewModel::getRadios,
-                    radioState = viewModel.radioUiState,
+            composable(MainDestinations.Genre.name) {
+                val viewModel: GenreViewModel = viewModel(factory = GenreViewModel.Factory)
+                LaunchedEffect(true) {
+                    viewModel.getGenre(uiState.topicId)
+                }
+                GenreScreen(
+                    retryAction = {
+                        viewModel.getGenre(uiState.topicId)
+                    },
+                    genreState = viewModel.genreUiState,
                     onNavigateToTracks = {
                         uiState.type = CommonMethod.RADIO_TYPE
-                        uiState.radioId = it
                         navController.navigate(route = MainDestinations.Song.name)
                         Log.d("shidou", "id: $it")
                     }
@@ -208,6 +209,5 @@ fun NavGraph(
                 MyMusicScreen()
             }
         }
-
     }
 }

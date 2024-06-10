@@ -1,4 +1,4 @@
-package com.example.musicapp.ui.topsong.view
+package com.example.musicapp.ui.genre.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -41,24 +41,24 @@ import com.example.musicapp.ui.theme.DarkBackground
 import com.example.musicapp.ui.theme.Silver
 
 //@Composable
-//fun TopSongScreen(
-//    topSongState: TopSongUiState,
+//fun RadioTracksScreen(
+//    radioTracksState: RadioTracksUiState,
 //    retryAction: () -> Unit,
 //    onNavigateToPlayingSong: (Data) -> Unit,
 //    onNavigateBack: () -> Unit,
 //    modifier: Modifier = Modifier,
 //    contentPadding: PaddingValues = PaddingValues(0.dp)
 //) {
-//    when (topSongState) {
-//        is TopSongUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-//        is TopSongUiState.Success -> ListSongs(
-//            song = topSongState.topSong.data,
+//    when (radioTracksState) {
+//        is RadioTracksUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
+//        is RadioTracksUiState.Success -> ListSongs(
+//            song = radioTracksState.radioTracks.data,
 //            onNavigateToPlayingSong = onNavigateToPlayingSong,
 //            onNavigateBack = onNavigateBack,
 //            modifier = modifier.fillMaxSize()
 //        )
 //
-//        is TopSongUiState.Error -> ErrorScreen(
+//        is RadioTracksUiState.Error -> ErrorScreen(
 //            retryAction = {
 //                retryAction()
 //            },
@@ -164,9 +164,8 @@ import com.example.musicapp.ui.theme.Silver
 //            contentPadding = contentPadding
 //        ) {
 //            items(items = song ?: emptyList()) { data ->
-//                uiState.listSong.add(data ?: return@items)
 //                SongCard(
-//                    song = data,
+//                    song = data!!,
 //                    onNavigateToPlayingSong = {
 //                        onNavigateToPlayingSong(it)
 //                    },

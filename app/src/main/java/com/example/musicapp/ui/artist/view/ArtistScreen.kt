@@ -16,7 +16,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,106 +29,104 @@ import com.example.musicapp.R
 import com.example.musicapp.common.ErrorScreen
 import com.example.musicapp.common.HeaderSection
 import com.example.musicapp.common.LoadingScreen
-import com.example.musicapp.modelresponse.artist.Data
-import com.example.musicapp.ui.artist.viewmodel.ArtistsUiState
 import com.example.musicapp.ui.theme.DarkBackground
 import com.example.musicapp.ui.theme.Silver
 
-@Composable
-fun ArtistScreen(
-    artistState: ArtistsUiState,
-    retryAction: () -> Unit,
-    onNavigateTop50Songs: (Long) -> Unit,
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
-) {
-    when (artistState) {
-        is ArtistsUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-        is ArtistsUiState.Success -> ListArtists(
-            artists = artistState.artists.data,
-            onNavigateTop50Songs = onNavigateTop50Songs,
-            modifier = modifier.fillMaxSize()
-        )
-
-        is ArtistsUiState.Error -> ErrorScreen(
-            retryAction = retryAction,
-            modifier = modifier.fillMaxSize()
-        )
-    }
-}
-
-@Composable
-fun ArtistPhoto(
-    artistImg: String,
-    modifier: Modifier = Modifier
-) {
-    AsyncImage(
-        model = ImageRequest.Builder(context = LocalContext.current)
-            .data(artistImg)
-            .crossfade(true)
-            .build(),
-        contentDescription = stringResource(R.string.artist_name),
-        error = painterResource(R.drawable.ic_connection_error),
-        placeholder = painterResource(R.drawable.loading_img),
-        modifier = modifier.clip(CircleShape)
-    )
-
-}
-
-@Composable
-fun ArtistCard(
-    artists: Data,
-    onNavigateTop50Songs: (Long) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier.fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clickable {
-                onNavigateTop50Songs(artists.id?.toLong() ?: 0)
-            }
-    ) {
-        ArtistPhoto(
-            artistImg = artists.pictureMedium ?: ""
-        )
-        Spacer(modifier = Modifier.width(20.dp))
-        Text(
-            text = artists.name ?: "",
-            style = MaterialTheme.typography.labelSmall,
-            color = Silver,
-            modifier = Modifier.padding(horizontal = 8.dp)
-                .align(Alignment.CenterVertically)
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-    }
-
-}
-
-@Composable
-fun ListArtists(
-    artists: List<Data?>?,
-    onNavigateTop50Songs: (Long) -> Unit,
-    modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(0.dp)
-) {
-    Column(
-        modifier = Modifier
-            .background(DarkBackground)
-            .fillMaxSize()
-            .padding(top = 32.dp)
-    ) {
-        HeaderSection("Artists", Modifier.padding(horizontal = 32.dp))
-        LazyColumn(
-            modifier = modifier.padding(horizontal = 16.dp, vertical = 16.dp),
-            contentPadding = contentPadding
-        ) {
-            items(items = artists ?: emptyList()) { data ->
-                ArtistCard(
-                    artists = data!!,
-                    onNavigateTop50Songs = onNavigateTop50Songs,
-                    modifier = modifier.fillMaxWidth()
-                )
-            }
-        }
-    }
-}
+//@Composable
+//fun ArtistScreen(
+//    artistState: ArtistsUiState,
+//    retryAction: () -> Unit,
+//    onNavigateTop50Songs: (Long) -> Unit,
+//    modifier: Modifier = Modifier,
+//    contentPadding: PaddingValues = PaddingValues(0.dp)
+//) {
+//    when (artistState) {
+//        is ArtistsUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
+//        is ArtistsUiState.Success -> ListArtists(
+//            artists = artistState.artists.data,
+//            onNavigateTop50Songs = onNavigateTop50Songs,
+//            modifier = modifier.fillMaxSize()
+//        )
+//
+//        is ArtistsUiState.Error -> ErrorScreen(
+//            retryAction = retryAction,
+//            modifier = modifier.fillMaxSize()
+//        )
+//    }
+//}
+//
+//@Composable
+//fun ArtistPhoto(
+//    artistImg: String,
+//    modifier: Modifier = Modifier
+//) {
+//    AsyncImage(
+//        model = ImageRequest.Builder(context = LocalContext.current)
+//            .data(artistImg)
+//            .crossfade(true)
+//            .build(),
+//        contentDescription = stringResource(R.string.artist_name),
+//        error = painterResource(R.drawable.ic_connection_error),
+//        placeholder = painterResource(R.drawable.loading_img),
+//        modifier = modifier.clip(CircleShape)
+//    )
+//
+//}
+//
+//@Composable
+//fun ArtistCard(
+//    artists: Data,
+//    onNavigateTop50Songs: (Long) -> Unit,
+//    modifier: Modifier = Modifier
+//) {
+//    Row(
+//        modifier = modifier.fillMaxWidth()
+//            .padding(vertical = 8.dp)
+//            .clickable {
+//                onNavigateTop50Songs(artists.id?.toLong() ?: 0)
+//            }
+//    ) {
+//        ArtistPhoto(
+//            artistImg = artists.pictureMedium ?: ""
+//        )
+//        Spacer(modifier = Modifier.width(20.dp))
+//        Text(
+//            text = artists.name ?: "",
+//            style = MaterialTheme.typography.labelSmall,
+//            color = Silver,
+//            modifier = Modifier.padding(horizontal = 8.dp)
+//                .align(Alignment.CenterVertically)
+//        )
+//        Spacer(modifier = Modifier.width(8.dp))
+//    }
+//
+//}
+//
+//@Composable
+//fun ListArtists(
+//    artists: List<Data?>?,
+//    onNavigateTop50Songs: (Long) -> Unit,
+//    modifier: Modifier = Modifier,
+//    contentPadding: PaddingValues = PaddingValues(0.dp)
+//) {
+//    Column(
+//        modifier = Modifier
+//            .background(DarkBackground)
+//            .fillMaxSize()
+//            .padding(top = 32.dp)
+//    ) {
+//        HeaderSection("Artists", Modifier.padding(horizontal = 32.dp))
+//        LazyColumn(
+//            modifier = modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+//            contentPadding = contentPadding
+//        ) {
+//            items(items = artists ?: emptyList()) { data ->
+//                ArtistCard(
+//                    artists = data!!,
+//                    onNavigateTop50Songs = onNavigateTop50Songs,
+//                    modifier = modifier.fillMaxWidth()
+//                )
+//            }
+//        }
+//    }
+//}

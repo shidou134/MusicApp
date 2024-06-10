@@ -107,22 +107,22 @@ fun RegistrationScreen(
                         registrationViewModel.onUiEvent(registrationUiEvent = RegistrationUiEvent.Submit)
                     }
                 )
-                FooterText(
-                    modifier = Modifier
-                        .padding(top = dimensionResource(R.dimen.padding_large))
-                        .fillMaxWidth(),
-                    text = stringResource(id = R.string.or_login_with_label),
-                    textAlign = TextAlign.Center
-                )
-                LoginwithGoogleButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = dimensionResource(R.dimen.padding_medium)),
-                    onClick = onLoginWithGoogle,
-                    text = stringResource(R.string.login_with_google),
-                    imageDescription = stringResource(R.string.google),
-                    image = R.drawable.ic_google
-                )
+//                FooterText(
+//                    modifier = Modifier
+//                        .padding(top = dimensionResource(R.dimen.padding_large))
+//                        .fillMaxWidth(),
+//                    text = stringResource(id = R.string.or_login_with_label),
+//                    textAlign = TextAlign.Center
+//                )
+//                LoginwithGoogleButton(
+//                    modifier = Modifier
+//                        .fillMaxWidth()
+//                        .padding(top = dimensionResource(R.dimen.padding_medium)),
+//                    onClick = onLoginWithGoogle,
+//                    text = stringResource(R.string.login_with_google),
+//                    imageDescription = stringResource(R.string.google),
+//                    image = R.drawable.ic_google
+//                )
             }
 
         }

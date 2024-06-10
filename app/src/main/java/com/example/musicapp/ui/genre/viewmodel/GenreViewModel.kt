@@ -1,4 +1,4 @@
-package com.example.musicapp.ui.radio.viewmodel
+package com.example.musicapp.ui.genre.viewmodel
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -10,33 +10,32 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import coil.network.HttpException
 import com.example.musicapp.SongApplication
-import com.example.musicapp.common.CommonState
 import com.example.musicapp.data.SongRepository
-import com.example.musicapp.modelresponse.radiosong.RadioSongsModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import com.example.musicapp.modelresponse.genre.GenreItem
 import kotlinx.coroutines.launch
 import java.io.IOException
 
-sealed interface RadioTracksUiState {
-    data class Success(val radioTracks: RadioSongsModel) : RadioTracksUiState
-    data object Loading : RadioTracksUiState
-    data object Error : RadioTracksUiState
+sealed interface GenreUiState {
+    data class Success(val genre: List<GenreItem>) : GenreUiState
+    data object Loading : GenreUiState
+    data object Error : GenreUiState
 }
 
-class RadioTracksViewModel(private val songRepository: SongRepository) : ViewModel() {
-    var radioTracksUiState: RadioTracksUiState by mutableStateOf(RadioTracksUiState.Loading)
+class GenreViewModel(private val songRepository: SongRepository) : ViewModel() {
+    var genreUiState: GenreUiState by mutableStateOf(GenreUiState.Loading)
         private set
-    fun getRadioTracks(id:Long) {
+
+    fun getGenre(idTopic: String) {
         viewModelScope.launch {
-            radioTracksUiState = RadioTracksUiState.Loading
-            radioTracksUiState = try {
-                RadioTracksUiState.Success(
-                    songRepository.getRadioTracks(id)
+            genreUiState = GenreUiState.Loading
+            genreUiState = try {
+                GenreUiState.Success(
+                    songRepository.getGenres(idTopic)
                 )
             } catch (e: IOException) {
-                RadioTracksUiState.Error
+                GenreUiState.Error
             } catch (e: HttpException) {
-                RadioTracksUiState.Error
+                GenreUiState.Error
             }
         }
     }
@@ -47,7 +46,7 @@ class RadioTracksViewModel(private val songRepository: SongRepository) : ViewMod
                 val application =
                     (this[ViewModelProvider.AndroidViewModelFactory.APPLICATION_KEY] as SongApplication)
                 val songRepository = application.container.songRepository
-                RadioTracksViewModel(songRepository = songRepository)
+                GenreViewModel(songRepository = songRepository)
             }
         }
     }

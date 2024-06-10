@@ -1,18 +1,19 @@
-package com.example.musicapp.ui.radio.view
+package com.example.musicapp.ui.genre.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,28 +30,28 @@ import com.example.musicapp.R
 import com.example.musicapp.common.ErrorScreen
 import com.example.musicapp.common.HeaderSection
 import com.example.musicapp.common.LoadingScreen
-import com.example.musicapp.modelresponse.radio.Data
-import com.example.musicapp.ui.radio.viewmodel.RadiosUiState
+import com.example.musicapp.modelresponse.genre.GenreItem
+import com.example.musicapp.ui.genre.viewmodel.GenreUiState
 import com.example.musicapp.ui.theme.DarkBackground
 import com.example.musicapp.ui.theme.Silver
 
 @Composable
-fun RadioScreen(
-    radioState: RadiosUiState,
+fun GenreScreen(
+    genreState: GenreUiState,
     retryAction: () -> Unit,
-    onNavigateToTracks: (Long) -> Unit,
+    onNavigateToTracks: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
-    when (radioState) {
-        is RadiosUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-        is RadiosUiState.Success -> ListRadios(
-            radios = radioState.radio.data,
+    when (genreState) {
+        is GenreUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
+        is GenreUiState.Success -> ListGenre(
+            genre = genreState.genre,
             onNavigateToTracks = onNavigateToTracks,
             modifier = modifier.fillMaxSize()
         )
 
-        is RadiosUiState.Error -> ErrorScreen(
+        is GenreUiState.Error -> ErrorScreen(
             retryAction = retryAction,
             modifier = modifier.fillMaxSize()
         )
@@ -58,46 +59,46 @@ fun RadioScreen(
 }
 
 @Composable
-fun RadioPhoto(
-    radioImg: String,
+fun GenrePhoto(
+    genreImg: String,
     modifier: Modifier = Modifier
 ) {
     AsyncImage(
         model = ImageRequest.Builder(context = LocalContext.current)
-            .data(radioImg)
+            .data(genreImg)
             .crossfade(true)
             .build(),
-        contentDescription = stringResource(R.string.radio_name),
+        contentDescription = stringResource(R.string.genre_name),
         error = painterResource(R.drawable.ic_connection_error),
         placeholder = painterResource(R.drawable.loading_img),
-        modifier = modifier.clip(CircleShape)
+        modifier = modifier.clip(RoundedCornerShape(12.dp))
     )
 
 }
 
 @Composable
-fun RadioCard(
-    radio: Data,
-    onNavigateToTracks: (Long) -> Unit,
+fun GenreCard(
+    genre: GenreItem,
+    onNavigateToTracks: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    Column(
         modifier = modifier.fillMaxWidth()
             .padding(vertical = 8.dp)
             .clickable {
-                onNavigateToTracks(radio.id ?: 0)
+                onNavigateToTracks()
             }
     ) {
-        RadioPhoto(
-            radioImg = radio.pictureMedium ?: ""
+        GenrePhoto(
+            genreImg = genre.genreImg ?: ""
         )
         Spacer(modifier = Modifier.width(20.dp))
         Text(
-            text = radio.title ?: "",
-            style = MaterialTheme.typography.labelSmall,
+            text = genre.genreName ?: "",
             color = Silver,
+            style = MaterialTheme.typography.displaySmall,
             modifier = Modifier.padding(horizontal = 8.dp)
-                .align(Alignment.CenterVertically)
+                .align(Alignment.CenterHorizontally)
         )
         Spacer(modifier = Modifier.width(8.dp))
     }
@@ -105,9 +106,9 @@ fun RadioCard(
 }
 
 @Composable
-fun ListRadios(
-    radios: List<Data?>?,
-    onNavigateToTracks: (Long) -> Unit,
+fun ListGenre(
+    genre: List<GenreItem>,
+    onNavigateToTracks: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
@@ -118,13 +119,13 @@ fun ListRadios(
             .padding(top = 32.dp)
     ) {
         HeaderSection("Radio", Modifier.padding(horizontal = 32.dp))
-        LazyColumn(
+        LazyVerticalGrid(
             modifier = modifier.padding(horizontal = 16.dp, vertical = 16.dp),
-            contentPadding = contentPadding
+            columns = GridCells.Fixed(2)
         ) {
-            items(items = radios ?: emptyList()) { data ->
-                RadioCard(
-                    radio = data!!,
+            items( items = genre) { data ->
+                GenreCard(
+                    genre = data,
                     onNavigateToTracks = onNavigateToTracks,
                     modifier = modifier.fillMaxWidth()
                 )

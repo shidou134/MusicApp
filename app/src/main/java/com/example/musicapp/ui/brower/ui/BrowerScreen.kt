@@ -16,7 +16,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -40,11 +40,8 @@ import com.example.musicapp.common.ErrorScreen
 import com.example.musicapp.common.HeaderSection
 import com.example.musicapp.common.LoadingScreen
 import com.example.musicapp.common.SectionHeader
-import com.example.musicapp.modelresponse.artist.ArtistResponse
-import com.example.musicapp.modelresponse.artist.Data
-import com.example.musicapp.modelresponse.radio.RadioModel
-import com.example.musicapp.ui.artist.view.ListArtists
-import com.example.musicapp.ui.artist.viewmodel.ArtistsUiState
+import com.example.musicapp.modelresponse.playlist.PlaylistItem
+import com.example.musicapp.modelresponse.topic.TopicItem
 import com.example.musicapp.ui.brower.viewmodel.BrowserUiState
 import com.example.musicapp.ui.theme.DarkBackground
 import com.example.musicapp.ui.theme.DarkBackgroundOpacity
@@ -54,11 +51,11 @@ import com.example.musicapp.ui.theme.Silver
 fun BrowserScreen(
     browserUiState: BrowserUiState,
     onNavigateTop50Songs: (Long) -> Unit,
-    onNavigateToTracks: (Long) -> Unit,
+    onNavigateToGenreScreen: (String) -> Unit,
     retryAction: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    when(browserUiState){
+    when (browserUiState) {
         is BrowserUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
         is BrowserUiState.Success -> {
             Column(
@@ -71,18 +68,19 @@ fun BrowserScreen(
                 HeaderSection("Browser", Modifier.padding(horizontal = 32.dp))
                 SectionHeader(title = "Trending", subtitle = "Music", action = "See All")
                 TrendingSection()
-                SectionHeader(title = "Live", subtitle = "Radio")
-                RadioSection(
-                    radios = browserUiState.radio.data,
-                    onNavigateToTracks = onNavigateToTracks,
+                SectionHeader(title = "Hot", subtitle = "Topic")
+                TopicSection(
+                    topic = browserUiState.topic,
+                    onNavigateToGenreScreen = onNavigateToGenreScreen
                 )
-                SectionHeader(title = "Famous", subtitle = "Artist")
-                ArtistSection(
-                    artists = browserUiState.artists.data,
+                SectionHeader(title = "Top", subtitle = "Playlist")
+                PlaylistSection(
+                    playlist = browserUiState.playlist,
                     onNavigateTop50Songs = onNavigateTop50Songs,
                 )
             }
         }
+
         is BrowserUiState.Error -> ErrorScreen(
             retryAction = retryAction,
             modifier = modifier.fillMaxSize()
@@ -130,28 +128,26 @@ fun TrendingSection() {
 
 
 @Composable
-fun ArtistSection(
-    artists: List<Data?>?,
+fun PlaylistSection(
+    playlist: List<PlaylistItem>,
     onNavigateTop50Songs: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyRow(
         contentPadding = PaddingValues(horizontal = 32.dp)
     ) {
-        itemsIndexed(items = artists ?: emptyList()) { index, data ->
-            if (index <= 3) {
-                ArtistItem(
-                    artists = data!!,
-                    onNavigateTop50Songs = onNavigateTop50Songs
-                )
-            }
+        items(items = playlist) { item ->
+            PlaylistItem(
+                playlist = item,
+                onNavigateTop50Songs = onNavigateTop50Songs
+            )
         }
     }
 }
 
 @Composable
-fun ArtistItem(
-    artists: Data,
+fun PlaylistItem(
+    playlist: PlaylistItem,
     onNavigateTop50Songs: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -162,11 +158,11 @@ fun ArtistItem(
         Box(
             modifier = Modifier.size(128.dp)
                 .clickable {
-                    onNavigateTop50Songs(artists.id?.toLong() ?: 0)
+                    onNavigateTop50Songs(playlist.idPlaylist?.toLong() ?: 0)
                 }
         ) {
-            ArtistPhoto(
-                artistImg = artists.pictureMedium ?: ""
+            PlaylistPhoto(
+                playlistImg = playlist.img ?: ""
             )
             Canvas(
                 modifier = Modifier
@@ -186,7 +182,7 @@ fun ArtistItem(
             }
         }
         Text(
-            text = artists.name ?: "",
+            text = playlist.name ?: "",
             color = Silver,
             style = MaterialTheme.typography.displaySmall,
             modifier = Modifier.padding(top = 4.dp)
@@ -195,16 +191,16 @@ fun ArtistItem(
 }
 
 @Composable
-fun ArtistPhoto(
-    artistImg: String,
+fun PlaylistPhoto(
+    playlistImg: String,
     modifier: Modifier = Modifier
 ) {
     AsyncImage(
         model = ImageRequest.Builder(context = LocalContext.current)
-            .data(artistImg)
+            .data(playlistImg)
             .crossfade(true)
             .build(),
-        contentDescription = stringResource(R.string.artist_name),
+        contentDescription = stringResource(R.string.playlist_name),
         error = painterResource(R.drawable.ic_connection_error),
         placeholder = painterResource(R.drawable.loading_img),
         modifier = modifier.clip(CircleShape)
@@ -212,48 +208,45 @@ fun ArtistPhoto(
 }
 
 @Composable
-fun RadioSection(
-    radios: List<com.example.musicapp.modelresponse.radio.Data?>?,
-    onNavigateToTracks: (Long) -> Unit,
+fun TopicSection(
+    topic: List<TopicItem>,
+    onNavigateToGenreScreen: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyRow(
         modifier = modifier,
         contentPadding = PaddingValues(horizontal = 32.dp)
     ) {
-        itemsIndexed(items = radios ?: emptyList()) { index, data ->
-            if (index <= 3) {
-                RadioItem(
-                    radio = data!!,
-                    onNavigateToTracks = onNavigateToTracks,
-                    modifier = modifier.fillMaxWidth()
-                )
-            }
+        items(items = topic) { item ->
+            TopicItem(
+                topic = item,
+                onNavigateToGenreScreen = onNavigateToGenreScreen
+            )
         }
     }
 }
 
 @Composable
-fun RadioItem(
-    radio: com.example.musicapp.modelresponse.radio.Data,
-    onNavigateToTracks: (Long) -> Unit,
+fun TopicItem(
+    topic: TopicItem,
+    onNavigateToGenreScreen: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
-            .padding(horizontal =  8.dp)
+            .padding(horizontal = 8.dp)
             .clickable {
-                onNavigateToTracks(radio.id ?: 0)
+                onNavigateToGenreScreen(topic.idTopic ?: "")
             }
     ) {
-        RadioPhoto(
-            radioImg = radio.pictureMedium ?: ""
+        TopicPhoto(
+            topicImg = topic.topicImg ?: ""
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = radio.title ?: "",
+            text = topic.topicName ?: "",
             color = Silver,
-            style = MaterialTheme.typography.displaySmall,
+            style = MaterialTheme.typography.labelSmall,
             modifier = Modifier.padding(horizontal = 8.dp)
                 .align(Alignment.CenterHorizontally)
         )
@@ -261,16 +254,16 @@ fun RadioItem(
 }
 
 @Composable
-fun RadioPhoto(
-    radioImg: String,
+fun TopicPhoto(
+    topicImg: String,
     modifier: Modifier = Modifier
 ) {
     AsyncImage(
         model = ImageRequest.Builder(context = LocalContext.current)
-            .data(radioImg)
+            .data(topicImg)
             .crossfade(true)
             .build(),
-        contentDescription = stringResource(R.string.radio_name),
+        contentDescription = stringResource(R.string.topic_name),
         error = painterResource(R.drawable.ic_connection_error),
         placeholder = painterResource(R.drawable.loading_img),
         modifier = modifier.clip(RoundedCornerShape(12.dp))
