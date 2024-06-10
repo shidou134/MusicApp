@@ -13,6 +13,7 @@ interface SongRepository {
     suspend fun getTopFavouriteSongs(): List<SongItem>
     suspend fun getAlbums(): List<AlbumItem>
     suspend fun getGenres(idTopic: String): List<GenreItem>
+    suspend fun getSongByGenre(idGenre: String): List<SongItem>
 }
 
 class NetworkSongRepository(
@@ -23,4 +24,5 @@ class NetworkSongRepository(
     override suspend fun getTopFavouriteSongs(): List<SongItem> = song.getFavouriteSongs()
     override suspend fun getAlbums(): List<AlbumItem> = song.getAlbums()
     override suspend fun getGenres(idTopic: String): List<GenreItem> = song.getGenre(idTopic)
+    override suspend fun getSongByGenre(idGenre: String): List<SongItem> = song.getSongByGenre(idGenre)
 }

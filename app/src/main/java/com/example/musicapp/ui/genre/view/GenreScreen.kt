@@ -39,7 +39,7 @@ import com.example.musicapp.ui.theme.Silver
 fun GenreScreen(
     genreState: GenreUiState,
     retryAction: () -> Unit,
-    onNavigateToTracks: () -> Unit,
+    onNavigateToTracks: (String) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
@@ -79,14 +79,14 @@ fun GenrePhoto(
 @Composable
 fun GenreCard(
     genre: GenreItem,
-    onNavigateToTracks: () -> Unit,
+    onNavigateToTracks: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
             .padding(vertical = 8.dp)
             .clickable {
-                onNavigateToTracks()
+                onNavigateToTracks(genre.idGenre ?: "")
             }
     ) {
         GenrePhoto(
@@ -108,7 +108,7 @@ fun GenreCard(
 @Composable
 fun ListGenre(
     genre: List<GenreItem>,
-    onNavigateToTracks: () -> Unit,
+    onNavigateToTracks: (String) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
@@ -123,7 +123,7 @@ fun ListGenre(
             modifier = modifier.padding(horizontal = 16.dp, vertical = 16.dp),
             columns = GridCells.Fixed(2)
         ) {
-            items( items = genre) { data ->
+            items(items = genre) { data ->
                 GenreCard(
                     genre = data,
                     onNavigateToTracks = onNavigateToTracks,

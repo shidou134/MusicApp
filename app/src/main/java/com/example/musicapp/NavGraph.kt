@@ -1,7 +1,6 @@
 package com.example.musicapp
 
 import android.util.Log
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -17,9 +16,11 @@ import com.example.musicapp.common.CommonMethod
 import com.example.musicapp.ui.brower.ui.BrowserScreen
 import com.example.musicapp.ui.brower.viewmodel.BrowserViewModel
 import com.example.musicapp.ui.genre.view.GenreScreen
+import com.example.musicapp.ui.song.view.SongsScreen
 import com.example.musicapp.ui.home.view.HomeScreen
 import com.example.musicapp.ui.mymusic.view.MyMusicScreen
 import com.example.musicapp.ui.genre.viewmodel.GenreViewModel
+import com.example.musicapp.ui.song.viewmodell.SongsViewModel
 import com.example.musicapp.ui.home.HomeViewModel
 
 enum class MainDestinations {
@@ -59,54 +60,23 @@ fun NavGraph(
             route = MainDestinations.MainApp.name
         ) {
             composable(route = MainDestinations.Song.name) {
-//                    CommonMethod.ARTIST_TYPE -> {
-//                        val topSongViewModel: TopSongViewModel =
-//                            viewModel(factory = TopSongViewModel.Factory)
-//                        LaunchedEffect(true) {
-//                            topSongViewModel.getTopSong(uiState.artistId)
-//                        }
-//
-////                        TopSongScreen(
-////                            retryAction = {
-////                                topSongViewModel.getTopSong(uiState.artistId)
-////                            },
-////                            onNavigateBack = {
-////                                navController.popBackStack()
-////                            },
-////                            onNavigateToPlayingSong = {
-//////                                song ->
-//////                                sharedViewModel.setMusicExoPlayer(context, song)
-//////                                Log.d("shidou", "listSongs: ${uiState.listSong.size}")
-//////                                sharedViewModel.setSong(song)
-//////                                navController.navigate(route = MainDestinations.PlayingSong.name)
-////                            },
-////                            topSongState = topSongViewModel.topSongUiState,
-////                            modifier = Modifier.fillMaxSize()
-////                        )
+                val viewModel: SongsViewModel = viewModel(factory = SongsViewModel.Factory)
+                fun getSong() {
+                    viewModel.getSong(uiState.genreId)
+                }
+                LaunchedEffect(true) {
+                    getSong()
+                }
+                SongsScreen(
+                    songsState = viewModel.songsUiState,
+                    retryAction = {
+                        getSong()
+                    },
+                    onNavigateBack = {},
+                    onNavigateToPlayingSong = {
 
-
-//                        val radioTrackViewModel: RadioTracksViewModel =
-//                            viewModel(factory = RadioTracksViewModel.Factory)
-//                        LaunchedEffect(true) {
-//                            radioTrackViewModel.getRadioTracks(uiState.radioId)
-//                        }
-//                        RadioTracksScreen(
-//                            retryAction = {
-//                                radioTrackViewModel.getRadioTracks(uiState.radioId)
-//                            },
-//                            onNavigateBack = {
-//                                navController.popBackStack()
-//                            },
-//                            onNavigateToPlayingSong = {
-////                                sharedViewModel.setMusicExoPlayer(context, song)
-////                                Log.d("shidou", "listSongs: ${uiState.listSong.size}")
-////                                sharedViewModel.setSong(song)
-////                                navController.navigate(route = MainDestinations.PlayingSong.name)
-//                            },
-//                            radioTracksState = radioTrackViewModel.radioTracksUiState,
-//                            modifier = Modifier.fillMaxSize()
-//                        )
-
+                    }
+                )
             }
 
             composable(route = MainDestinations.PlayingSong.name) {
@@ -153,7 +123,7 @@ fun NavGraph(
                     browserUiState = browserViewModel.browserUiState,
                     retryAction = browserViewModel::getData,
                     onNavigateToGenreScreen = {
-                        uiState.type = CommonMethod.RADIO_TYPE
+                        uiState.type = CommonMethod.GENRE
                         uiState.topicId = it
                         navController.navigate(route = MainDestinations.Genre.name)
                     },
@@ -199,7 +169,8 @@ fun NavGraph(
                     },
                     genreState = viewModel.genreUiState,
                     onNavigateToTracks = {
-                        uiState.type = CommonMethod.RADIO_TYPE
+                        uiState.type = CommonMethod.GENRE
+                        uiState.genreId = it
                         navController.navigate(route = MainDestinations.Song.name)
                         Log.d("shidou", "id: $it")
                     }

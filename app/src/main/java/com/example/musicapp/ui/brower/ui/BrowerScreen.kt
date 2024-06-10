@@ -234,15 +234,35 @@ fun TopicItem(
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
-            .padding(horizontal = 8.dp)
-            .clickable {
-                onNavigateToGenreScreen(topic.idTopic ?: "")
-            }
+            .padding(horizontal = 8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TopicPhoto(
-            topicImg = topic.topicImg ?: ""
-        )
-        Spacer(modifier = Modifier.height(8.dp))
+        Box(
+            modifier = Modifier.size(128.dp)
+                .clickable {
+                    onNavigateToGenreScreen(topic.idTopic ?: "")
+                }
+        ) {
+            TopicPhoto(
+                topicImg = topic.topicImg ?: ""
+            )
+            Canvas(
+                modifier = Modifier
+                    .size(32.dp)
+                    .align(Alignment.Center)
+            ) {
+                drawCircle(
+                    color = DarkBackgroundOpacity,
+                    radius = 48f,
+                    style = Fill
+                )
+                drawCircle(
+                    color = DarkBackground,
+                    radius = 32f,
+                    style = Fill
+                )
+            }
+        }
         Text(
             text = topic.topicName ?: "",
             color = Silver,
@@ -266,7 +286,7 @@ fun TopicPhoto(
         contentDescription = stringResource(R.string.topic_name),
         error = painterResource(R.drawable.ic_connection_error),
         placeholder = painterResource(R.drawable.loading_img),
-        modifier = modifier.clip(RoundedCornerShape(12.dp))
+        modifier = modifier.clip(CircleShape)
     )
 
 }

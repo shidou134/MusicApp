@@ -44,5 +44,9 @@ interface SongService {
     @POST("listGenre.php")
     suspend fun getGenre(@retrofit2.http.Field("idTopic") idTopic: String): List<GenreItem>
 
+    @FormUrlEncoded
+    @POST("listSong.php")
+    suspend fun getSongByGenre(@retrofit2.http.Field("idGenre") idGenre: String): List<SongItem>
+
 
 }

@@ -4,6 +4,7 @@ package com.example.musicapp.common
 data class CommonState(
     var type: Int = 0,
     var topicId: String = "",
+    var genreId: String = "",
     var radioId: Long = 0,
     var songId: Long = 0,
     val isSongPlaying: Boolean = false,
