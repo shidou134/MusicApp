@@ -23,6 +23,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,9 +33,12 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.example.musicapp.R
+import com.example.musicapp.SharedViewModel
+import com.example.musicapp.common.CommonState
 import com.example.musicapp.common.ErrorScreen
 import com.example.musicapp.common.LoadingScreen
 import com.example.musicapp.modelresponse.song.SongItem
@@ -42,12 +46,14 @@ import com.example.musicapp.ui.song.viewmodell.SongsUiState
 import com.example.musicapp.ui.theme.DarkBackground
 import com.example.musicapp.ui.theme.DarkBackgroundOpacity
 import com.example.musicapp.ui.theme.Silver
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 
 @Composable
 fun SongsScreen(
     songsState: SongsUiState,
     retryAction: () -> Unit,
-    onNavigateToPlayingSong: () -> Unit,
+    onNavigateToPlayingSong: (SongItem) -> Unit,
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
@@ -90,13 +96,13 @@ fun SongPhoto(
 @Composable
 fun SongCard(
     song: SongItem,
-    onNavigateToPlayingSong: () -> Unit,
+    onNavigateToPlayingSong: (SongItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier.fillMaxWidth()
             .padding(vertical = 8.dp)
-            .clickable { onNavigateToPlayingSong() }
+            .clickable { onNavigateToPlayingSong(song) }
     ) {
         Box(
             modifier = Modifier.size(128.dp)
@@ -148,10 +154,12 @@ fun SongCard(
 fun ListSongs(
     song: List<SongItem>,
     onNavigateBack: () -> Unit,
-    onNavigateToPlayingSong: () -> Unit,
+    onNavigateToPlayingSong: (SongItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
+    val listSong = song.toMutableStateList()
+    val sharedViewModel = SharedViewModel()
     Column(
         modifier = Modifier
             .background(DarkBackground)
@@ -184,13 +192,14 @@ fun ListSongs(
             contentPadding = contentPadding
         ) {
             items(items = song) { data ->
+                listSong.add(data)
                 SongCard(
                     song = data,
                     onNavigateToPlayingSong = onNavigateToPlayingSong,
                     modifier = modifier.fillMaxWidth()
                 )
-
             }
+            sharedViewModel.getListSong(listSong)
         }
     }
 }

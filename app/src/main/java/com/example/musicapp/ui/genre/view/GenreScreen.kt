@@ -40,16 +40,27 @@ fun GenreScreen(
     genreState: GenreUiState,
     retryAction: () -> Unit,
     onNavigateToTracks: (String) -> Unit,
+    onSearchSong: () -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
     when (genreState) {
         is GenreUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
-        is GenreUiState.Success -> ListGenre(
-            genre = genreState.genre,
-            onNavigateToTracks = onNavigateToTracks,
-            modifier = modifier.fillMaxSize()
-        )
+        is GenreUiState.Success ->
+            Column(
+                modifier = Modifier
+                    .background(DarkBackground)
+                    .fillMaxSize()
+                    .padding(top = 32.dp)
+            ) {
+                HeaderSection("Radio", onSearchSong, Modifier.padding(horizontal = 32.dp))
+                ListGenre(
+                    genre = genreState.genre,
+                    onNavigateToTracks = onNavigateToTracks,
+                    modifier = modifier.fillMaxSize()
+                )
+            }
+
 
         is GenreUiState.Error -> ErrorScreen(
             retryAction = retryAction,
@@ -112,24 +123,17 @@ fun ListGenre(
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
-    Column(
-        modifier = Modifier
-            .background(DarkBackground)
-            .fillMaxSize()
-            .padding(top = 32.dp)
+    LazyVerticalGrid(
+        modifier = modifier.padding(horizontal = 16.dp, vertical = 16.dp),
+        columns = GridCells.Fixed(2)
     ) {
-        HeaderSection("Radio", Modifier.padding(horizontal = 32.dp))
-        LazyVerticalGrid(
-            modifier = modifier.padding(horizontal = 16.dp, vertical = 16.dp),
-            columns = GridCells.Fixed(2)
-        ) {
-            items(items = genre) { data ->
-                GenreCard(
-                    genre = data,
-                    onNavigateToTracks = onNavigateToTracks,
-                    modifier = modifier.fillMaxWidth()
-                )
-            }
+        items(items = genre) { data ->
+            GenreCard(
+                genre = data,
+                onNavigateToTracks = onNavigateToTracks,
+                modifier = modifier.fillMaxWidth()
+            )
         }
     }
+
 }

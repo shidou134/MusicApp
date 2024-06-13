@@ -23,5 +23,3 @@ class DefaultAppContainer : AppContainer {
         NetworkSongRepository(retrofitService)
     }
 }
-
-//Json{ignoreUnknownKeys=true}.asConverterFactory("application/json".toMediaType())

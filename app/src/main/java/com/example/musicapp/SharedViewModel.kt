@@ -1,18 +1,16 @@
 package com.example.musicapp
 
-import android.content.Context
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.media3.common.MediaItem
-import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import com.example.musicapp.common.CommonState
+import com.example.musicapp.modelresponse.song.SongItem
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 
 class SharedViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(CommonState())
@@ -21,6 +19,13 @@ class SharedViewModel : ViewModel() {
     private lateinit var player: ExoPlayer
     private lateinit var runnable: Runnable
     private var handler = Handler(Looper.getMainLooper())
+
+    private var _listSong = MutableLiveData<List<SongItem>>()
+    val listSong: LiveData<List<SongItem>> = _listSong
+
+    fun getListSong(song: List<SongItem>) {
+        _listSong.value = song
+    }
 
 //    fun setSong(song: Data?) {
 //        _uiState.update {

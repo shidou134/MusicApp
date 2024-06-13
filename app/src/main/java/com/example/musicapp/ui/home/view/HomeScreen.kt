@@ -46,12 +46,13 @@ import com.example.musicapp.ui.theme.Silver
 @Composable
 fun HomeScreen(
     homeUiState: HomeUiState,
-    onNavigateTop50Songs: (Long) -> Unit,
-    onNavigateToTracks: () -> Unit,
+    onNavigateTop50SongsAlbum: (String) -> Unit,
+    onNavigateToTracks: (SongItem) -> Unit,
     retryAction: () -> Unit,
+    onSearchSong: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    when(homeUiState){
+    when (homeUiState) {
         is HomeUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
         is HomeUiState.Success -> {
             Column(
@@ -61,7 +62,7 @@ fun HomeScreen(
                     .padding(vertical = 32.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                HeaderSection("Home", Modifier.padding(horizontal = 32.dp))
+                HeaderSection("Home", onSearchSong, Modifier.padding(horizontal = 32.dp))
                 SectionHeader(title = "Top Favourite", subtitle = "Song")
                 TopFavouriteSongsSection(
                     topFavouriteSong = homeUiState.topFavouriteSongs,
@@ -70,10 +71,11 @@ fun HomeScreen(
                 SectionHeader(title = "Hot", subtitle = "Album")
                 AlbumSection(
                     album = homeUiState.album,
-                    onNavigateTop50Songs = onNavigateTop50Songs,
+                    onNavigateTop50Songs = onNavigateTop50SongsAlbum,
                 )
             }
         }
+
         is HomeUiState.Error -> ErrorScreen(
             retryAction = retryAction,
             modifier = modifier.fillMaxSize()
@@ -84,13 +86,13 @@ fun HomeScreen(
 @Composable
 fun AlbumSection(
     album: List<AlbumItem>,
-    onNavigateTop50Songs: (Long) -> Unit,
+    onNavigateTop50Songs: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyRow(
         contentPadding = PaddingValues(horizontal = 32.dp)
     ) {
-        items(items = album){item->
+        items(items = album) { item ->
             AlbumItem(
                 album = item,
                 onNavigateTop50Songs = onNavigateTop50Songs
@@ -102,7 +104,7 @@ fun AlbumSection(
 @Composable
 fun AlbumItem(
     album: AlbumItem,
-    onNavigateTop50Songs: (Long) -> Unit,
+    onNavigateTop50Songs: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -112,7 +114,7 @@ fun AlbumItem(
         Box(
             modifier = Modifier.size(128.dp)
                 .clickable {
-                    onNavigateTop50Songs(album.idAlbum?.toLong() ?: 0)
+                    onNavigateTop50Songs(album.idAlbum ?: "")
                 }
         ) {
             AlbumPhoto(
@@ -164,14 +166,14 @@ fun AlbumPhoto(
 @Composable
 fun TopFavouriteSongsSection(
     topFavouriteSong: List<SongItem>,
-    onNavigateToTracks: () -> Unit,
+    onNavigateToTracks: (SongItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyRow(
         modifier = modifier,
         contentPadding = PaddingValues(horizontal = 32.dp)
     ) {
-        items(items = topFavouriteSong){item->
+        items(items = topFavouriteSong) { item ->
             TopFavouriteSongsItem(
                 topFavouriteSong = item,
                 onNavigateToTracks = onNavigateToTracks
@@ -183,14 +185,14 @@ fun TopFavouriteSongsSection(
 @Composable
 fun TopFavouriteSongsItem(
     topFavouriteSong: SongItem,
-    onNavigateToTracks: () -> Unit,
+    onNavigateToTracks: (SongItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier.fillMaxWidth()
-            .padding(horizontal =  8.dp)
+            .padding(horizontal = 8.dp)
             .clickable {
-                onNavigateToTracks()
+                onNavigateToTracks(topFavouriteSong)
             }
     ) {
         TopFavouriteSongsPhoto(

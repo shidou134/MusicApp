@@ -50,9 +50,10 @@ import com.example.musicapp.ui.theme.Silver
 @Composable
 fun BrowserScreen(
     browserUiState: BrowserUiState,
-    onNavigateTop50Songs: (Long) -> Unit,
+    onNavigateToPlaylist: (String) -> Unit,
     onNavigateToGenreScreen: (String) -> Unit,
     retryAction: () -> Unit,
+    onSearchSong: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     when (browserUiState) {
@@ -65,7 +66,7 @@ fun BrowserScreen(
                     .padding(vertical = 32.dp)
                     .verticalScroll(rememberScrollState())
             ) {
-                HeaderSection("Browser", Modifier.padding(horizontal = 32.dp))
+                HeaderSection("Browser", onSearchSong, Modifier.padding(horizontal = 32.dp))
                 SectionHeader(title = "Trending", subtitle = "Music", action = "See All")
                 TrendingSection()
                 SectionHeader(title = "Hot", subtitle = "Topic")
@@ -76,7 +77,7 @@ fun BrowserScreen(
                 SectionHeader(title = "Top", subtitle = "Playlist")
                 PlaylistSection(
                     playlist = browserUiState.playlist,
-                    onNavigateTop50Songs = onNavigateTop50Songs,
+                    onNavigateTop50Songs = onNavigateToPlaylist,
                 )
             }
         }
@@ -130,7 +131,7 @@ fun TrendingSection() {
 @Composable
 fun PlaylistSection(
     playlist: List<PlaylistItem>,
-    onNavigateTop50Songs: (Long) -> Unit,
+    onNavigateTop50Songs: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyRow(
@@ -148,7 +149,7 @@ fun PlaylistSection(
 @Composable
 fun PlaylistItem(
     playlist: PlaylistItem,
-    onNavigateTop50Songs: (Long) -> Unit,
+    onNavigateTop50Songs: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -158,7 +159,7 @@ fun PlaylistItem(
         Box(
             modifier = Modifier.size(128.dp)
                 .clickable {
-                    onNavigateTop50Songs(playlist.idPlaylist?.toLong() ?: 0)
+                    onNavigateTop50Songs(playlist.idPlaylist ?: "")
                 }
         ) {
             PlaylistPhoto(

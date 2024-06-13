@@ -1,6 +1,7 @@
 package com.example.musicapp.common
 
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -84,7 +85,7 @@ fun ErrorTextInputField(
 }
 
 @Composable
-fun HeaderSection(title: String, modifier: Modifier = Modifier) {
+fun HeaderSection(title: String, onSearchSong: () -> Unit, modifier: Modifier = Modifier) {
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = modifier
@@ -103,7 +104,9 @@ fun HeaderSection(title: String, modifier: Modifier = Modifier) {
                 .border(1.dp, Silver, CircleShape)
                 .padding(4.dp)
                 .size(24.dp)
-            ,
+                .clickable {
+                    onSearchSong()
+                },
             tint = Silver
         )
         Icon(
@@ -118,6 +121,7 @@ fun HeaderSection(title: String, modifier: Modifier = Modifier) {
         )
     }
 }
+
 @Composable
 fun SectionHeader(title: String, subtitle: String, action: String? = null) {
     Row(
