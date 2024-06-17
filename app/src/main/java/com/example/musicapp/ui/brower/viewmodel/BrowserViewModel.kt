@@ -11,6 +11,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import coil.network.HttpException
 import com.example.musicapp.SongApplication
 import com.example.musicapp.data.SongRepository
+import com.example.musicapp.modelresponse.advertise.AdvertiseItem
 import com.example.musicapp.modelresponse.playlist.PlaylistItem
 import com.example.musicapp.modelresponse.topic.TopicItem
 import kotlinx.coroutines.launch
@@ -19,7 +20,8 @@ import java.io.IOException
 sealed interface BrowserUiState {
     data class Success(
         val topic: List<TopicItem> ,
-        val playlist: List<PlaylistItem>
+        val playlist: List<PlaylistItem>,
+        val songBanner: List<AdvertiseItem>
     ) : BrowserUiState
 
     data object Loading : BrowserUiState
@@ -40,7 +42,8 @@ class BrowserViewModel(private val songRepository: SongRepository) : ViewModel()
             browserUiState = try {
                 BrowserUiState.Success(
                     songRepository.getTopics(),
-                    songRepository.getPlaylists()
+                    songRepository.getPlaylists(),
+                    songRepository.getSongBanner()
                 )
             } catch (e: IOException) {
                 BrowserUiState.Error

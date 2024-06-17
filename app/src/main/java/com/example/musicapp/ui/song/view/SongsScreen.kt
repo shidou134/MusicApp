@@ -55,6 +55,7 @@ fun SongsScreen(
     retryAction: () -> Unit,
     onNavigateToPlayingSong: (SongItem) -> Unit,
     onNavigateBack: () -> Unit,
+    title: String,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
@@ -64,6 +65,7 @@ fun SongsScreen(
             song = songsState.songs,
             onNavigateToPlayingSong = onNavigateToPlayingSong,
             onNavigateBack = onNavigateBack,
+            title = title,
             modifier = modifier.fillMaxSize()
         )
 
@@ -154,12 +156,11 @@ fun SongCard(
 fun ListSongs(
     song: List<SongItem>,
     onNavigateBack: () -> Unit,
+    title:String,
     onNavigateToPlayingSong: (SongItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
-    val listSong = song.toMutableStateList()
-    val sharedViewModel = SharedViewModel()
     Column(
         modifier = Modifier
             .background(DarkBackground)
@@ -181,7 +182,7 @@ fun ListSongs(
                 }
             )
             Text(
-                text = stringResource(R.string.top_song_title),
+                text = title,
                 style = MaterialTheme.typography.titleMedium,
                 color = Silver,
                 modifier = Modifier.align(Alignment.CenterVertically)
@@ -192,14 +193,12 @@ fun ListSongs(
             contentPadding = contentPadding
         ) {
             items(items = song) { data ->
-                listSong.add(data)
                 SongCard(
                     song = data,
                     onNavigateToPlayingSong = onNavigateToPlayingSong,
                     modifier = modifier.fillMaxWidth()
                 )
             }
-            sharedViewModel.getListSong(listSong)
         }
     }
 }

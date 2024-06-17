@@ -53,7 +53,7 @@ fun GenreScreen(
                     .fillMaxSize()
                     .padding(top = 32.dp)
             ) {
-                HeaderSection("Radio", onSearchSong, Modifier.padding(horizontal = 32.dp))
+                HeaderSection("Genre", onSearchSong, Modifier.padding(horizontal = 32.dp))
                 ListGenre(
                     genre = genreState.genre,
                     onNavigateToTracks = onNavigateToTracks,

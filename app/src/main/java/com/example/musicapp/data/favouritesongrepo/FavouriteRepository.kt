@@ -1,4 +1,4 @@
-package com.example.musicapp.data
+package com.example.musicapp.data.favouritesongrepo
 
 import com.example.musicapp.modelresponse.song.SongItem
 

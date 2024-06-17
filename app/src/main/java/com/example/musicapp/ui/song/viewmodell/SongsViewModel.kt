@@ -19,9 +19,11 @@ import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
 import coil.network.HttpException
 import com.example.musicapp.SongApplication
-import com.example.musicapp.data.FavoriteRepository
-import com.example.musicapp.data.FavouriteRepositoryImpl
+import com.example.musicapp.data.favouritesongrepo.FavoriteRepository
+import com.example.musicapp.data.favouritesongrepo.FavouriteRepositoryImpl
 import com.example.musicapp.data.SongRepository
+import com.example.musicapp.data.historyrepo.HistoryRepository
+import com.example.musicapp.data.historyrepo.HistoryRepositoryImpl
 import com.example.musicapp.modelresponse.song.SongItem
 import com.example.musicapp.ui.playingsong.state.SongUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,7 +41,8 @@ sealed interface SongsUiState {
 
 class SongsViewModel(
     private val songRepository: SongRepository,
-    private val favouriteSongRepository: FavoriteRepository = FavouriteRepositoryImpl()
+    private val favouriteSongRepository: FavoriteRepository = FavouriteRepositoryImpl(),
+    private val history: HistoryRepository = HistoryRepositoryImpl()
 ) : ViewModel() {
     var songsUiState: SongsUiState by mutableStateOf(SongsUiState.Loading)
         private set
@@ -56,9 +59,39 @@ class SongsViewModel(
     val songLiveData: LiveData<List<SongItem?>>
         get() = _songLiveData
 
+    private val _isLiked = MutableStateFlow(false)
+    val isLiked = _isLiked.asStateFlow()
+
+    fun addHistory(song: SongItem) {
+        viewModelScope.launch {
+            history.addHistory(song = song)
+        }
+    }
+    fun getHistory(){
+        viewModelScope.launch {
+            songsUiState = SongsUiState.Loading
+            songsUiState = try {
+                SongsUiState.Success(
+                    history.getHistory()
+                )
+            } catch (e: IOException) {
+                SongsUiState.Error
+            } catch (e: HttpException) {
+                SongsUiState.Error
+            }
+        }
+    }
+
     fun saveSong(favouriteSong: SongItem) {
         viewModelScope.launch {
             favouriteSongRepository.likedSong(song = favouriteSong)
+            _isLiked.value = true
+        }
+    }
+    fun unLikeSong(favouriteSong: SongItem) {
+        viewModelScope.launch {
+            favouriteSongRepository.deleteSongFavorite(song = favouriteSong)
+            _isLiked.value = false
         }
     }
 

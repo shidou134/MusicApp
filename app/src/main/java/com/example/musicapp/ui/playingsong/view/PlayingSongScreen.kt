@@ -19,6 +19,11 @@ import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,7 +56,9 @@ fun PlayingSongScreen(
     onValueChangeFinish: () -> Unit,
     onNextSong: (List<SongItem>) -> Unit,
     onPreviousSong: (List<SongItem>) -> Unit,
-    likedSong:(SongItem) ->Unit,
+    likedSong: (SongItem) -> Unit,
+    unLikedSong: (SongItem) -> Unit,
+    isLiked: Boolean,
     modifier: Modifier = Modifier
 ) {
     Surface(
@@ -76,15 +83,21 @@ fun PlayingSongScreen(
                     painter = painterResource(R.drawable.ic_playlist),
                     contentDescription = stringResource(R.string.my_music_your_playlists_title),
                     modifier = Modifier.clickable {
-
                     }
                 )
                 Spacer(modifier = Modifier.weight(1f))
                 Image(
-                    painter = painterResource(R.drawable.ic_like),
+                    painter = if (isLiked) painterResource(R.drawable.icon_like_red)
+                    else painterResource(
+                        R.drawable.ic_like
+                    ),
                     contentDescription = stringResource(R.string.my_music_liked_songs_title),
                     modifier = Modifier.clickable {
-                        likedSong(currentSong)
+                        if(isLiked){
+                            unLikedSong(currentSong)
+                        }else{
+                            likedSong(currentSong)
+                        }
                     }
                 )
             }

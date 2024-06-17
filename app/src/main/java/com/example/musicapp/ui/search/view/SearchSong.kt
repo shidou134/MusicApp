@@ -69,7 +69,7 @@ fun SearchSong(
         )
         Spacer(modifier = Modifier.height(16.dp))
         when (songUiState) {
-            is SongsUiState.Loading -> LoadingScreen(modifier = modifier.fillMaxSize())
+            is SongsUiState.Loading -> {}
             is SongsUiState.Success -> ListSongs(
                 song = songUiState.songs,
                 onNavigateToPlayingSong = onNavigateToPlayingSong,

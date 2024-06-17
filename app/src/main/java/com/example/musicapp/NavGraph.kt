@@ -6,6 +6,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -60,7 +63,7 @@ fun NavGraph(
     val viewModel: SongsViewModel = viewModel(factory = SongsViewModel.Factory)
     val playingSongUiState by viewModel.uiState.collectAsState()
     val searchText by viewModel.searchText.collectAsState()
-    var listSong = listOf<SongItem>()
+    val isLiked by viewModel.isLiked.collectAsState()
     NavHost(
         navController,
         startDestination = MainDestinations.MainApp.name,
@@ -72,27 +75,41 @@ fun NavGraph(
             route = MainDestinations.MainApp.name
         ) {
             composable(route = MainDestinations.Song.name) {
+                var title by remember {
+                    mutableStateOf("")
+                }
                 fun getSong() {
                     when (uiState.type) {
                         CommonMethod.GENRE -> {
+                            title = "Song by Genre"
                             viewModel.getSong(uiState.genreId)
                         }
 
                         CommonMethod.FAVOURITE_SONG -> {
+                            title = "Favourite Song"
                             viewModel.getFavouriteSong()
                         }
 
                         CommonMethod.PLAYLIST -> {
+                            title = "Song by Playlist"
                             viewModel.getSongInPlaylist(uiState.playlistId)
                         }
 
                         CommonMethod.ALBUM -> {
+                            title = "Song by Album"
                             viewModel.getSongInAlbum(uiState.albumId)
                         }
 
                         CommonMethod.ARTIST -> {
+                            title = "Song by Artist"
                             viewModel.getSongInArtist(uiState.artistId)
                         }
+
+                        CommonMethod.HISTORY -> {
+                            title = "History"
+                            viewModel.getHistory()
+                        }
+
                     }
                 }
                 LaunchedEffect(true) {
@@ -104,11 +121,13 @@ fun NavGraph(
                         getSong()
                     },
                     onNavigateBack = {
-                        navController.popBackStack()
+                        navController.navigateUp()
                     },
+                    title = title,
                     onNavigateToPlayingSong = {
                         viewModel.setMusicExoPlayer(context, it)
                         viewModel.setSong(it)
+                        viewModel.addHistory(it)
                         Log.d("shidou", "songitem: $it")
                         navController.navigate(route = MainDestinations.PlayingSong.name)
                     }
@@ -150,6 +169,10 @@ fun NavGraph(
                     likedSong = {
                         viewModel.saveSong(it)
                     },
+                    unLikedSong = {
+                        viewModel.unLikeSong(it)
+                    },
+                    isLiked = isLiked,
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -175,19 +198,42 @@ fun NavGraph(
                 )
             }
             composable(MainDestinations.Artists.name) {
-                val viewModel: ArtistViewModel = viewModel(factory = ArtistViewModel.Factory)
+                val artistViewModel: ArtistViewModel = viewModel(factory = ArtistViewModel.Factory)
+                val isFollowed by artistViewModel.isFollowed.collectAsState()
+                fun getArtists() {
+                    if (uiState.isFavouriteArtist) {
+                        artistViewModel.getFollowedArtist()
+                    } else {
+                        artistViewModel.getArtists()
+                    }
+                }
+                LaunchedEffect(true) {
+                    getArtists()
+                }
                 ArtistScreen(
-                    retryAction = viewModel::getArtists,
-                    artistState = viewModel.artistUiState,
+                    retryAction = {
+                        getArtists()
+                    },
+                    artistState = artistViewModel.artistUiState,
                     onSearchSong = {
+                        uiState.isFavouriteArtist = false
                         navController.navigate(route = MainDestinations.Search.name)
                     },
                     onNavigateTop50Songs = {
                         uiState.type = CommonMethod.ARTIST
                         uiState.artistId = it
+                        uiState.isFavouriteArtist = false
                         navController.navigate(route = MainDestinations.Song.name)
+                    },
+                    isFollowed = isFollowed,
+                    followArtist = {
+                        artistViewModel.saveArtist(it)
+                    },
+                    unfollowArtist = {
+                        artistViewModel.unfollowArtist(it)
                     }
                 )
+                uiState.isFavouriteArtist = false
             }
             composable(MainDestinations.Home.name) {
                 val homeViewModel: HomeViewModel = viewModel(factory = HomeViewModel.Factory)
@@ -210,15 +256,15 @@ fun NavGraph(
                 )
             }
             composable(MainDestinations.Genre.name) {
-                val viewModel: GenreViewModel = viewModel(factory = GenreViewModel.Factory)
+                val genreViewModel: GenreViewModel = viewModel(factory = GenreViewModel.Factory)
                 LaunchedEffect(true) {
-                    viewModel.getGenre(uiState.topicId)
+                    genreViewModel.getGenre(uiState.topicId)
                 }
                 GenreScreen(
                     retryAction = {
-                        viewModel.getGenre(uiState.topicId)
+                        genreViewModel.getGenre(uiState.topicId)
                     },
-                    genreState = viewModel.genreUiState,
+                    genreState = genreViewModel.genreUiState,
                     onNavigateToTracks = {
                         uiState.type = CommonMethod.GENRE
                         uiState.genreId = it
@@ -232,7 +278,10 @@ fun NavGraph(
             composable(MainDestinations.MyMusic.name) {
                 val myMusicViewModel: MyMusicViewModel = viewModel()
                 MyMusicScreen(
-                    onNavigateToHistory = {},
+                    onNavigateToHistory = {
+                        uiState.type = CommonMethod.HISTORY
+                        navController.navigate(route = MainDestinations.Song.name)
+                    },
                     onNavigateToLogOut = {
                         myMusicViewModel.logout()
                         navController.navigate(route = MainDestinations.Login.name)
@@ -242,14 +291,16 @@ fun NavGraph(
                         navController.navigate(route = MainDestinations.Song.name)
                     },
                     onNavigateToMyPlaylists = {},
-                    onNavigateToFollowedArtist = {},
+                    onNavigateToFollowedArtist = {
+                        uiState.isFavouriteArtist = true
+                        navController.navigate(route = MainDestinations.Artists.name)
+                    },
                     onSearchSong = {
                         navController.navigate(route = MainDestinations.Search.name)
                     }
                 )
             }
             composable(MainDestinations.Search.name) {
-
                 SearchSong(
                     songUiState = viewModel.songsUiState,
                     text = searchText,

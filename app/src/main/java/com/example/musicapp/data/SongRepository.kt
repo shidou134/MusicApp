@@ -1,5 +1,6 @@
 package com.example.musicapp.data
 
+import com.example.musicapp.modelresponse.advertise.AdvertiseItem
 import com.example.musicapp.modelresponse.album.AlbumItem
 import com.example.musicapp.modelresponse.artist.ArtistItem
 import com.example.musicapp.modelresponse.genre.GenreItem
@@ -19,7 +20,8 @@ interface SongRepository {
     suspend fun getSongByPlaylist(idPlaylist: String): List<SongItem>
     suspend fun getSongByAlbum(idAlbum: String): List<SongItem>
     suspend fun getListArtist(): List<ArtistItem>
-    suspend fun getSongByArtist(artistName: String): List<SongItem>
+    suspend fun getSongByArtist(idArtist: String): List<SongItem>
+    suspend fun getSongBanner():List<AdvertiseItem>
 }
 
 class NetworkSongRepository(
@@ -41,5 +43,6 @@ class NetworkSongRepository(
         song.getSongByAlbum(idAlbum)
 
     override suspend fun getListArtist(): List<ArtistItem> = song.getArtist()
-    override suspend fun getSongByArtist(artistName: String): List<SongItem> =song.getSongByArtist(artistName)
+    override suspend fun getSongByArtist(idArtist: String): List<SongItem> =song.getSongByArtist(idArtist)
+    override suspend fun getSongBanner(): List<AdvertiseItem> = song.getSongBanner()
 }

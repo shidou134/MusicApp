@@ -1,5 +1,6 @@
 package com.example.musicapp.network
 
+import com.example.musicapp.modelresponse.advertise.AdvertiseItem
 import com.example.musicapp.modelresponse.album.AlbumItem
 import com.example.musicapp.modelresponse.artist.ArtistItem
 import com.example.musicapp.modelresponse.genre.GenreItem
@@ -12,22 +13,6 @@ import retrofit2.http.POST
 
 
 interface SongService {
-
-
-//    @GET("search/artist")
-//    suspend fun getArtists(@Query("q") query: String): ArtistResponse
-//
-//    @GET("artist/{id}/top?limit=50")
-//    suspend fun getTop50Songs(@Path("id") id: Long): TopSongModel
-//
-//    @GET("track/{id}")
-//    suspend fun getTrack(@Path("id") id: Long): Track
-//
-//    @GET("radio/lists")
-//    suspend fun getRadios():RadioModel
-//
-//    @GET("radio/{id}/tracks")
-//    suspend fun getRadioTracks(@Path("id") id: Long):RadioSongsModel
 
     @GET("listTopic.php")
     suspend fun getTopics(): List<TopicItem>
@@ -43,6 +28,9 @@ interface SongService {
 
     @GET("listArtist.php")
     suspend fun getArtist(): List<ArtistItem>
+
+    @GET("songbanner.php")
+    suspend fun getSongBanner(): List<AdvertiseItem>
 
     @FormUrlEncoded
     @POST("listGenre.php")
@@ -66,7 +54,7 @@ interface SongService {
 
     @FormUrlEncoded
     @POST("listSong.php")
-    suspend fun getSongByArtist(@retrofit2.http.Field("artistName") artistName: String): List<SongItem>
+    suspend fun getSongByArtist(@retrofit2.http.Field("idArtist") idArtist: String): List<SongItem>
 
 
 }

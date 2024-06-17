@@ -1,5 +1,6 @@
 package com.example.musicapp.ui.artist.view
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -9,10 +10,13 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +44,9 @@ fun ArtistScreen(
     retryAction: () -> Unit,
     onNavigateTop50Songs: (String) -> Unit,
     onSearchSong: () -> Unit,
+    isFollowed: Boolean,
+    followArtist: (ArtistItem) -> Unit,
+    unfollowArtist: (ArtistItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
@@ -50,11 +57,15 @@ fun ArtistScreen(
                 modifier = Modifier
                     .background(DarkBackground)
                     .fillMaxSize()
+                    .padding(top = 32.dp)
             ) {
                 HeaderSection("Artists", onSearchSong, Modifier.padding(horizontal = 32.dp))
                 ListArtists(
                     artists = artistState.artists,
                     onNavigateTop50Songs = onNavigateTop50Songs,
+                    isFollowed = isFollowed,
+                    followArtist = followArtist,
+                    unfollowArtist = unfollowArtist,
                     modifier = modifier.fillMaxSize()
                 )
             }
@@ -80,6 +91,7 @@ fun ArtistPhoto(
         error = painterResource(R.drawable.ic_connection_error),
         placeholder = painterResource(R.drawable.loading_img),
         modifier = modifier.clip(CircleShape)
+            .size(128.dp)
     )
 
 }
@@ -88,6 +100,9 @@ fun ArtistPhoto(
 fun ArtistCard(
     artists: ArtistItem,
     onNavigateTop50Songs: (String) -> Unit,
+    isFollowed: Boolean,
+    followArtist: (ArtistItem) -> Unit,
+    unfollowArtist: (ArtistItem) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -109,6 +124,19 @@ fun ArtistCard(
                 .align(Alignment.CenterVertically)
         )
         Spacer(modifier = Modifier.width(8.dp))
+        Image(
+            painter = if(isFollowed) painterResource(R.drawable.icon_like_red) else painterResource(R.drawable.ic_like),
+            contentDescription = stringResource(R.string.my_music_follower_artists_title),
+            modifier = Modifier.clickable {
+                if(isFollowed){
+                    unfollowArtist(artists)
+                }else{
+                    followArtist(artists)
+                }
+            }
+                .align(Alignment.CenterVertically),
+            alignment = Alignment.CenterEnd
+        )
     }
 
 }
@@ -117,6 +145,9 @@ fun ArtistCard(
 fun ListArtists(
     artists: List<ArtistItem>,
     onNavigateTop50Songs: (String) -> Unit,
+    isFollowed: Boolean,
+    followArtist: (ArtistItem) -> Unit,
+    unfollowArtist: (ArtistItem) -> Unit,
     modifier: Modifier = Modifier,
     contentPadding: PaddingValues = PaddingValues(0.dp)
 ) {
@@ -124,16 +155,19 @@ fun ListArtists(
         modifier = Modifier
             .background(DarkBackground)
             .fillMaxSize()
-            .padding(top = 32.dp)
+            .padding(top = 16.dp)
     ) {
         LazyColumn(
             modifier = modifier.padding(horizontal = 16.dp, vertical = 16.dp),
             contentPadding = contentPadding
         ) {
-            items(items = artists ) { data ->
+            items(items = artists,) { data ->
                 ArtistCard(
                     artists = data,
                     onNavigateTop50Songs = onNavigateTop50Songs,
+                    isFollowed = isFollowed,
+                    followArtist = followArtist,
+                    unfollowArtist = unfollowArtist,
                     modifier = modifier.fillMaxWidth()
                 )
             }
