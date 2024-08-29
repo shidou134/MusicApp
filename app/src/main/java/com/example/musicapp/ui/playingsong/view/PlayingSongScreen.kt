@@ -56,6 +56,9 @@ fun PlayingSongScreen(
     onValueChangeFinish: () -> Unit,
     onNextSong: (List<SongItem>) -> Unit,
     onPreviousSong: (List<SongItem>) -> Unit,
+    addPlaylist: (SongItem) -> Unit,
+    removePlaylist: (SongItem) -> Unit,
+    isAddPlaylist: Boolean,
     likedSong: (SongItem) -> Unit,
     unLikedSong: (SongItem) -> Unit,
     isLiked: Boolean,
@@ -80,9 +83,15 @@ fun PlayingSongScreen(
                 modifier = Modifier.padding(horizontal = 16.dp)
             ) {
                 Image(
-                    painter = painterResource(R.drawable.ic_playlist),
+                    painter = if (isAddPlaylist)painterResource(R.drawable.ic_playlist)
+                    else painterResource(R.drawable.ic_mp3),
                     contentDescription = stringResource(R.string.my_music_your_playlists_title),
                     modifier = Modifier.clickable {
+                        if (isAddPlaylist) {
+                            removePlaylist(currentSong)
+                        } else {
+                            addPlaylist(currentSong)
+                        }
                     }
                 )
                 Spacer(modifier = Modifier.weight(1f))
@@ -93,9 +102,9 @@ fun PlayingSongScreen(
                     ),
                     contentDescription = stringResource(R.string.my_music_liked_songs_title),
                     modifier = Modifier.clickable {
-                        if(isLiked){
+                        if (isLiked) {
                             unLikedSong(currentSong)
-                        }else{
+                        } else {
                             likedSong(currentSong)
                         }
                     }

@@ -64,6 +64,7 @@ fun NavGraph(
     val playingSongUiState by viewModel.uiState.collectAsState()
     val searchText by viewModel.searchText.collectAsState()
     val isLiked by viewModel.isLiked.collectAsState()
+    val isAddPlaylist by viewModel.addPlaylist.collectAsState()
     NavHost(
         navController,
         startDestination = MainDestinations.MainApp.name,
@@ -78,6 +79,7 @@ fun NavGraph(
                 var title by remember {
                     mutableStateOf("")
                 }
+
                 fun getSong() {
                     when (uiState.type) {
                         CommonMethod.GENRE -> {
@@ -108,6 +110,11 @@ fun NavGraph(
                         CommonMethod.HISTORY -> {
                             title = "History"
                             viewModel.getHistory()
+                        }
+
+                        CommonMethod.MY_PLAYLIST -> {
+                            title = "My Playlist"
+                            viewModel.getMyPlaylist()
                         }
 
                     }
@@ -173,6 +180,13 @@ fun NavGraph(
                         viewModel.unLikeSong(it)
                     },
                     isLiked = isLiked,
+                    addPlaylist = {
+                        viewModel.addPlaylist(it)
+                    },
+                    removePlaylist = {
+                        viewModel.deletePlaylist(it)
+                    },
+                    isAddPlaylist = isAddPlaylist,
                     modifier = Modifier.fillMaxSize()
                 )
             }
@@ -290,7 +304,10 @@ fun NavGraph(
                         uiState.type = CommonMethod.FAVOURITE_SONG
                         navController.navigate(route = MainDestinations.Song.name)
                     },
-                    onNavigateToMyPlaylists = {},
+                    onNavigateToMyPlaylists = {
+                        uiState.type = CommonMethod.MY_PLAYLIST
+                        navController.navigate(route = MainDestinations.Song.name)
+                    },
                     onNavigateToFollowedArtist = {
                         uiState.isFavouriteArtist = true
                         navController.navigate(route = MainDestinations.Artists.name)

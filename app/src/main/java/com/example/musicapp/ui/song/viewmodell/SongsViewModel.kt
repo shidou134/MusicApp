@@ -24,6 +24,8 @@ import com.example.musicapp.data.favouritesongrepo.FavouriteRepositoryImpl
 import com.example.musicapp.data.SongRepository
 import com.example.musicapp.data.historyrepo.HistoryRepository
 import com.example.musicapp.data.historyrepo.HistoryRepositoryImpl
+import com.example.musicapp.data.myplaylistrepo.MyPlaylistRepository
+import com.example.musicapp.data.myplaylistrepo.MyPlaylistRepositoryImpl
 import com.example.musicapp.modelresponse.song.SongItem
 import com.example.musicapp.ui.playingsong.state.SongUiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -42,7 +44,8 @@ sealed interface SongsUiState {
 class SongsViewModel(
     private val songRepository: SongRepository,
     private val favouriteSongRepository: FavoriteRepository = FavouriteRepositoryImpl(),
-    private val history: HistoryRepository = HistoryRepositoryImpl()
+    private val history: HistoryRepository = HistoryRepositoryImpl(),
+    private val myPlaylist: MyPlaylistRepository = MyPlaylistRepositoryImpl()
 ) : ViewModel() {
     var songsUiState: SongsUiState by mutableStateOf(SongsUiState.Loading)
         private set
@@ -61,13 +64,47 @@ class SongsViewModel(
 
     private val _isLiked = MutableStateFlow(false)
     val isLiked = _isLiked.asStateFlow()
+    private val _addPlaylist = MutableStateFlow(false)
+    val addPlaylist = _addPlaylist.asStateFlow()
+
+    fun addPlaylist(song: SongItem) {
+        viewModelScope.launch {
+            myPlaylist.song(song)
+            _addPlaylist.value = true
+        }
+    }
+
+    fun getMyPlaylist() {
+        viewModelScope.launch {
+            songsUiState = SongsUiState.Loading
+            songsUiState = try {
+                SongsUiState.Success(
+                    myPlaylist.getMyPlaylist()
+                )
+            } catch (e: IOException) {
+                SongsUiState.Error
+            } catch (e: HttpException) {
+                SongsUiState.Error
+            }
+        }
+    }
+
+    fun deletePlaylist(song: SongItem) {
+        viewModelScope.launch {
+            viewModelScope.launch {
+                myPlaylist.deleteMyPlaylist(song = song)
+                _addPlaylist.value = false
+            }
+        }
+    }
 
     fun addHistory(song: SongItem) {
         viewModelScope.launch {
             history.addHistory(song = song)
         }
     }
-    fun getHistory(){
+
+    fun getHistory() {
         viewModelScope.launch {
             songsUiState = SongsUiState.Loading
             songsUiState = try {
@@ -88,6 +125,7 @@ class SongsViewModel(
             _isLiked.value = true
         }
     }
+
     fun unLikeSong(favouriteSong: SongItem) {
         viewModelScope.launch {
             favouriteSongRepository.deleteSongFavorite(song = favouriteSong)
@@ -113,6 +151,7 @@ class SongsViewModel(
     fun onSearchTextChange(text: String) {
         _searchText.value = text
     }
+
     fun searchSong(query: String) {
         viewModelScope.launch {
             songsUiState = SongsUiState.Loading
@@ -143,7 +182,7 @@ class SongsViewModel(
         }
     }
 
-    fun getSongInPlaylist(idPlaylist:String){
+    fun getSongInPlaylist(idPlaylist: String) {
         viewModelScope.launch {
             songsUiState = SongsUiState.Loading
             songsUiState = try {
@@ -158,7 +197,7 @@ class SongsViewModel(
         }
     }
 
-    fun getSongInAlbum(idAlbum:String){
+    fun getSongInAlbum(idAlbum: String) {
         viewModelScope.launch {
             songsUiState = SongsUiState.Loading
             songsUiState = try {
@@ -173,7 +212,7 @@ class SongsViewModel(
         }
     }
 
-    fun getSongInArtist(artistName:String){
+    fun getSongInArtist(artistName: String) {
         viewModelScope.launch {
             songsUiState = SongsUiState.Loading
             songsUiState = try {
